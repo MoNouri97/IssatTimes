@@ -1,17 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import WebView, { WebViewMessageEvent } from 'react-native-webview';
 import cheerioRN from 'react-native-cheerio';
-import cheerio from 'cheerio';
 
-import { fetchIssat } from '../utils/fetchIssat';
-import { Subject } from '../types';
+import { loadingStates, Subject } from '../types';
+import { SubjectsContext } from '../context/Subjects/SubjectsContext';
+import { GroupContext } from '../context/Group/GroupContext';
+import AppText from './AppText';
 
 interface Props {
-	onDataLoad: (data: Subject[][]) => void;
+	// onDataLoad: (data: Subject[][]) => void;
+	loadingState: loadingStates;
+	setLoadingState: React.Dispatch<React.SetStateAction<loadingStates>>;
 }
 
-const WebScrap: React.FC<Props> = ({ onDataLoad }) => {
+const WebScrap: React.FC<Props> = ({ loadingState, setLoadingState }) => {
+	const { setSubjects } = useContext(SubjectsContext);
+	const { group } = useContext(GroupContext);
+	const [uri, setUri] = useState('');
+
 	const getCookieAndTokenJs = `
 		const j = document.getElementById('jeton').value;
 		const c = document.cookie
@@ -20,24 +27,32 @@ const WebScrap: React.FC<Props> = ({ onDataLoad }) => {
 	`;
 	const webViewRef = useRef<WebView | null>(null);
 	const injectedJs = `
-			// js
 			const tab = document.querySelector("#dvContainer");
 			if(tab){
 				window.ReactNativeWebView.postMessage(tab.innerHTML)
 			}else{
-				document.querySelector("#form1 > table > tbody > tr > td:nth-child(2) > select").selectedIndex = 9;
+				document.querySelector("#form1 > table > tbody > tr > td:nth-child(2) > select").value = '${group.id}';
 				document.querySelector("#form1").submit();
 			}
 			true; // note: this is required, or you')'ll sometimes get silent failures
-			// !js
 		`;
 
 	const handleOnLoad = () => {
 		console.log('loaded ....');
+		if (loadingState === 'Not Loading') {
+			return;
+		}
+		setLoadingState(
+			loadingState === 'Loading www.issatso.rnu.tn ...'
+				? 'Choosing Group ...'
+				: 'Collecting Data ...',
+		);
 		webViewRef.current?.injectJavaScript(injectedJs);
+		console.log(
+			`injected : document.querySelector("#form1 > table > tbody > tr > td:nth-child(2) > select").value = '${group.id}'`,
+		);
 	};
 	const handleOnMessage = async (event: WebViewMessageEvent) => {
-		// console.log('message', event.nativeEvent.data);
 		const $ = cheerioRN.load(event.nativeEvent.data);
 
 		// needed vars
@@ -98,18 +113,36 @@ const WebScrap: React.FC<Props> = ({ onDataLoad }) => {
 			console.log(error.message);
 		}
 
-		onDataLoad(week);
+		if (setSubjects) {
+			setSubjects(week);
+			setLoadingState('Done');
+		} else {
+			console.log('error : setSubject is undefined');
+		}
 	};
+
+	useEffect(() => {
+		if (loadingState === 'Loading www.issatso.rnu.tn ...') {
+			setUri('http://www.issatso.rnu.tn/fo/emplois/emploi_groupe.php');
+		}
+	}, [loadingState, setUri]);
 
 	return (
 		<WebView
-			containerStyle={{ height: 0, width: 0, display: 'none' }}
+			startInLoadingState={false}
+			containerStyle={{ display: 'none' }}
+			// containerStyle={{ height: 0, width: 0, display: 'none' }}
 			ref={webViewRef}
 			onLoadEnd={handleOnLoad}
 			originWhitelist={['*']}
-			source={{ uri: 'http://www.issatso.rnu.tn/fo/emplois/emploi_groupe.php' }}
+			source={{ uri }}
 			onMessage={handleOnMessage}
-			style={{ marginTop: 40 }}
+			style={{
+				width: '100%',
+				flex: 1,
+				borderWidth: 2,
+				borderColor: '#000',
+			}}
 		/>
 	);
 };

@@ -12,16 +12,22 @@ import AppText from './AppText';
 interface Props {
 	primary?: boolean;
 	onPress?: ((event: GestureResponderEvent) => void) | undefined;
+	style?: StyleProp<ViewStyle>;
 }
 
-const AppBtn: React.FC<Props> = ({ children, primary = false, onPress }) => {
+const AppBtn: React.FC<Props> = ({
+	children,
+	primary = false,
+	onPress,
+	style,
+}) => {
 	const btnStyle: StyleProp<ViewStyle> = {
 		...styles.btn,
 		backgroundColor: primary ? color.primary : color.secondary,
 	};
 
 	return (
-		<TouchableOpacity style={btnStyle} onPress={onPress}>
+		<TouchableOpacity style={[btnStyle, style]} onPress={onPress}>
 			<AppText style={styles.text}>{children}</AppText>
 		</TouchableOpacity>
 	);

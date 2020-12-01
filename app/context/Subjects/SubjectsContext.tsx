@@ -1,5 +1,5 @@
 import React from 'react';
-import { Subject } from '../types';
+import { Subject } from '../../types';
 
 export const SubjectsContext = React.createContext<{
 	subjects: Subject[][];

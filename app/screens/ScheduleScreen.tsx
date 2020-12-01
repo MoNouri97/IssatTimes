@@ -1,29 +1,28 @@
 import React, { useContext } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import faker from 'faker';
 import Card from '../components/Card';
-import Screen from '../components/Screen';
-import { Subject } from '../types';
+import { ParamList } from '../types';
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
-import { SubjectsContext } from '../context/SubjectsContext';
+import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 import AppBtn from '../components/AppBtn';
-import { initState } from '../context/useSubjectsState';
-import WebScrap from '../components/WebScrap';
 
-type ParamList = {
-	weekDay: { index: number };
-};
+const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
 const ScheduleScreen: React.FC<
 	MaterialTopTabScreenProps<ParamList, 'weekDay'>
 > = ({ route }) => {
-	const { subjects, setSubjects } = useContext(SubjectsContext);
+	// context
+	const { subjects } = useContext(SubjectsContext);
+	console.log(subjects[route.params.index]);
+	console.log('week day:subjects.length ', subjects.length);
+	console.log('week day:route.params.index ', route.params.index);
+
 	return (
 		<View style={styles.container}>
 			<FlatList
-				ListEmptyComponent={() => <AppBtn>Loading . . .</AppBtn>}
+				ListEmptyComponent={LoadingIndicator}
 				style={styles.list}
 				data={subjects[route.params.index]}
-				keyExtractor={item => `${item.time}-${item.name}`}
+				keyExtractor={(item, index) => `${index}-${item.name}`}
 				contentContainerStyle={styles.listContainer}
 				renderItem={item => <Card {...item.item} />}
 			/>

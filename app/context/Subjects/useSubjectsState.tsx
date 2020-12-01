@@ -1,8 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import faker from 'faker';
-import { Subject } from '../types';
+import { Subject } from '../../types';
 
 export const initState = () => {
+	// const saved = localStorage.getItem('subjects');
+	// if (saved) {
+	// 	return JSON.parse(saved);
+	// }
 	const res = [];
 	for (let index = 0; index < 6; index++) {
 		res.push([]);
@@ -32,6 +36,9 @@ const hardCoded = () => {
 
 export const useSubjectsState = () => {
 	const [subjects, setSubjects] = useState<Subject[][]>(initState);
+	// useEffect(() => {
+	// 	localStorage.setItem('subjects', JSON.stringify(subjects));
+	// }, [subjects]);
 	const value = useMemo(() => ({ subjects, setSubjects }), [
 		subjects,
 		setSubjects,

@@ -12,7 +12,7 @@ interface Props {
 	style?: StyleProp<ViewStyle>;
 }
 
-const Screen: React.FC<Props> = ({ children, style }) => {
+const AppScreen: React.FC<Props> = ({ children, style }) => {
 	return (
 		<SafeAreaView style={[styles.container, style]}>{children}</SafeAreaView>
 	);
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
 		paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight : 0,
 	},
 });
-export default Screen;
+export default AppScreen;
