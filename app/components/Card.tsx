@@ -5,16 +5,48 @@ import color from '../config/color';
 import { Subject } from '../types';
 import AppText from './AppText';
 import defaultStyles from '../config/defaultStyles';
+import { time } from 'faker';
 
+const timesArr = {
+	S1: {
+		from: '08.30',
+		to: '10.00',
+	},
+	S2: {
+		from: '10.10',
+		to: '11.40',
+	},
+	S3: {
+		from: '11.50',
+		to: '13.20',
+	},
+	S4: {
+		from: '13.50',
+		to: '15.20',
+	},
+	S5: {
+		from: '15.30',
+		to: '17.00',
+	},
+	S6: {
+		from: '17.10',
+		to: '18.40',
+	},
+	"S4'": {
+		from: '13.30',
+		to: '15.00',
+	},
+};
 const AppCard: React.FC<Subject> = ({
 	name,
 	teacher,
 	type,
 	location,
 	regime,
+	time,
 }) => {
 	return (
-		<View style={styles.container}>
+		<View style={styles.mainContent}>
 			<View
 				style={[
 					styles.tag,
@@ -24,8 +56,14 @@ const AppCard: React.FC<Subject> = ({
 				<Feather name='user' size={20} color={color.white} />
 				<AppText style={styles.tagText}>{teacher}</AppText>
 			</View>
-			<View style={styles.row}>
+			<View style={[styles.titleContainer]}>
 				<AppText style={styles.title}>{name}</AppText>
+				<View style={styles.time}>
+					<AppText>{time}</AppText>
+					<AppText style={styles.timeClock}>
+						{`${timesArr[time]?.from}\n\n${timesArr[time]?.to}`}
+					</AppText>
+				</View>
 			</View>
 			<AppText style={styles.type}>{type}</AppText>
 			<View style={styles.subTitleContainer}>
@@ -35,7 +73,7 @@ const AppCard: React.FC<Subject> = ({
 						color={color.medium}
 						size={20}
 					/>
-					<AppText style={styles.mediumText}>{regime} </AppText>
+					<AppText style={styles.subtitleText}>{regime} </AppText>
 				</View>
 				<View style={styles.subTitle}>
 					<MaterialCommunityIcons
@@ -43,7 +81,7 @@ const AppCard: React.FC<Subject> = ({
 						color={color.medium}
 						size={20}
 					/>
-					<AppText style={styles.mediumText}>{location} </AppText>
+					<AppText style={styles.subtitleText}>{location} </AppText>
 				</View>
 			</View>
 		</View>
@@ -51,23 +89,23 @@ const AppCard: React.FC<Subject> = ({
 };
 const styles = StyleSheet.create({
 	container: {
+		flexDirection: 'row',
+	},
+	mainContent: {
 		// height: 280,
 		backgroundColor: color.white,
 		// backgroundColor: color.light,
-		width: '100%',
 		borderRadius: 20,
+		flex: 1,
 		overflow: 'hidden',
 		marginBottom: 10,
 		paddingVertical: 10,
-		paddingHorizontal: 30,
+		paddingLeft: 30,
+		paddingRight: 10,
 		alignItems: 'flex-start',
 		// elevation: 1,
 	},
-	mediumText: {
-		fontWeight: 'bold',
-		color: color.medium,
-		marginHorizontal: 10,
-	},
+
 	row: {
 		width: '100%',
 		flexDirection: 'row',
@@ -76,6 +114,12 @@ const styles = StyleSheet.create({
 	subTitle: {
 		flexDirection: 'row',
 		alignItems: 'center',
+	},
+	subtitleText: {
+		fontWeight: '100',
+		color: color.medium,
+		marginHorizontal: 10,
+		fontSize: 13,
 	},
 	subTitleContainer: {
 		marginVertical: 20,
@@ -95,16 +139,36 @@ const styles = StyleSheet.create({
 	tagText: {
 		marginHorizontal: 10,
 		color: color.white,
+		fontSize: 15,
+	},
+	time: {
+		flexDirection: 'row',
+		width: 100,
+		marginBottom: 5,
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+	timeClock: {
+		fontSize: 12,
+		flex: 1,
 	},
 	title: {
-		fontSize: 20,
+		fontSize: 15,
 		textTransform: 'uppercase',
 		color: color.black,
 		fontWeight: 'bold',
+		flexShrink: 1,
+		maxWidth: '50%',
+	},
+	titleContainer: {
+		width: '100%',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
 	},
 	type: {
 		position: 'absolute',
-		top: 0,
+		bottom: 0,
 		right: 0,
 		fontSize: 50,
 		zIndex: -1,

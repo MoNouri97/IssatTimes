@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet, View } from 'react-native';
 
 import Tabs from './app/screens/Tabs';
 import { SubjectsContext } from './app/context/Subjects/SubjectsContext';
@@ -20,6 +20,7 @@ export default function App() {
 	// return <sTestScreen />;
 	return (
 		<GroupContext.Provider value={groupValue}>
+			<StatusBar backgroundColor='#fff' barStyle='dark-content' />
 			<SubjectsContext.Provider value={subjectsValue}>
 				{!groupValue.group.id ? (
 					<SelectGroup />

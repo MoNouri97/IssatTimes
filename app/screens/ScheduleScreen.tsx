@@ -18,7 +18,7 @@ const ScheduleScreen: React.FC<
 			<FlatList
 				ListEmptyComponent={LoadingIndicator}
 				style={styles.list}
-				data={state.subjects[route.params.index]}
+				data={state.subjects ? state.subjects[route.params.index] : []}
 				keyExtractor={(item, index) => `${index}-${item.name}`}
 				contentContainerStyle={styles.listContainer}
 				renderItem={item => <Card {...item.item} />}

@@ -4,9 +4,8 @@ import ScheduleScreen from './ScheduleScreen';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import TopBar from '../components/TopBar';
-import AppScreen from '../components/AppScreen';
-import TestScreen from './TestScreen';
 import { NavigationContainer } from '@react-navigation/native';
+import AppTabBar from '../components/AppTabBar';
 
 const Tab = createMaterialTopTabNavigator();
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -16,7 +15,12 @@ const Tabs: React.FC = ({}) => {
 			<TopBar />
 			<View style={styles.container}>
 				<NavigationContainer independent>
-					<Tab.Navigator backBehavior='none' lazy lazyPreloadDistance={1}>
+					<Tab.Navigator
+						backBehavior='none'
+						lazy
+						lazyPreloadDistance={1}
+						// tabBar={AppTabBar}
+					>
 						{days.map((day, i) => (
 							<Tab.Screen
 								key={i}

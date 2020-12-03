@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { InitialState } from '@react-navigation/native';
 
 export type SubjectsState = {
-	subjects: Subject[][];
+	subjects: Subject[][] | null;
 	loading: boolean;
 };
 export type ActionType = 'START_LOADING' | 'UPDATE' | 'RESET';
@@ -16,7 +16,8 @@ const loadStateFromStorage = async () => {
 
 	return saved ? (JSON.parse(saved) as Subject[][]) : null;
 };
-const saveStateToStorage = async (data: Subject[][]) => {
+const saveStateToStorage = async (data: Subject[][] | null) => {
+	console.log({ data });
 	await AsyncStorage.setItem('subjects', JSON.stringify(data));
 };
 
@@ -41,7 +42,7 @@ const hardCoded = () => {
 };
 
 export const initialState: SubjectsState = {
-	subjects: [[], [], [], [], [], []],
+	subjects: null,
 	loading: true,
 };
 
@@ -67,20 +68,23 @@ const reducer = (
 
 export const useSubjectsState = () => {
 	const [state, dispatch] = useReducer(reducer, initialState);
-	// useEffect(() => {
-	// 	saveStateToStorage(state.subjects);
-	// }, [state.subjects]);
+	useEffect(() => {
+		// if (!state.subjects) {
+		// 	return;
+		// }
+		saveStateToStorage(state.subjects);
+	}, [state.subjects]);
 
-	// useEffect(() => {
-	// 	dispatch({ type: 'START_LOADING' });
-	// 	loadStateFromStorage().then(data => {
-	// 		if (!data) {
-	// 			dispatch({ type: 'RESET' });
-	// 			return;
-	// 		}
-	// 		dispatch({ type: 'UPDATE', payload: data });
-	// 	});
-	// }, []);
+	useEffect(() => {
+		dispatch({ type: 'START_LOADING' });
+		loadStateFromStorage().then(data => {
+			if (!data) {
+				dispatch({ type: 'RESET' });
+				return;
+			}
+			dispatch({ type: 'UPDATE', payload: data });
+		});
+	}, []);
 
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 	return value;
