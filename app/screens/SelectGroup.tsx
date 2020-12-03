@@ -1,4 +1,3 @@
-import { StackScreenProps } from '@react-navigation/stack';
 import React, { useContext, useState } from 'react';
 import {
 	ScrollView,
@@ -7,40 +6,40 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+
 import AppText from '../components/AppText';
 import AppScreen from '../components/AppScreen';
 import color from '../config/color';
 import { GroupContext } from '../context/Group/GroupContext';
-import { groupInfo, ParamList } from '../types';
+import { groupInfo } from '../types';
 import { groupList } from '../utils/groupList';
+import defaultStyles from '../config/defaultStyles';
 
 const SelectGroup: React.FC = () => {
 	const [search, setSearch] = useState('');
 	const { setGroup } = useContext(GroupContext);
-	// const [loading, setLoading] = useState(false);
 	const handleSelectGroup = (selection: groupInfo) => {
 		setSearch(selection.name);
 		setGroup!(selection);
-		// setLoading(true);
-		// push('Main');
 	};
-	// const onDataLoaded = useCallback(() => {
-	// 	console.log('navigate');
-	// 	push('Main');
-	// }, [push]);
 
 	return (
 		<AppScreen style={styles.bg}>
 			<View style={styles.container}>
-				<TextInput
-					style={styles.input}
-					placeholder='choose a group ...'
-					value={search}
-					onChange={e => {
-						setSearch(e.nativeEvent.text);
-					}}
-				/>
+				<AppText style={defaultStyles.title}>Select Your Group</AppText>
 
+				<View style={styles.inputContainer}>
+					<TextInput
+						style={styles.input}
+						placeholder='type to search'
+						value={search}
+						onChange={e => {
+							setSearch(e.nativeEvent.text);
+						}}
+					/>
+					<Feather style={styles.inputIcon} name='search' size={15} />
+				</View>
 				<ScrollView style={styles.list}>
 					{groupList
 						.filter(grp =>
@@ -74,8 +73,17 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		fontSize: 20,
-		backgroundColor: color.light,
+		flex: 1,
 		padding: 20,
+	},
+	inputIcon: {
+		minWidth: 30,
+	},
+	inputContainer: {
+		backgroundColor: color.light,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
 		borderRadius: 5,
 	},
 	list: {

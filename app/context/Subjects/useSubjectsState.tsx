@@ -3,23 +3,16 @@ import faker from 'faker';
 import { Subject } from '../../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { InitialState } from '@react-navigation/native';
+import {
+	loadStateFromStorage,
+	saveStateToStorage,
+} from '../../utils/ManageAsyncStorage';
 
 export type SubjectsState = {
 	subjects: Subject[][] | null;
 	loading: boolean;
 };
-export type ActionType = 'START_LOADING' | 'UPDATE' | 'RESET';
-
-const loadStateFromStorage = async () => {
-	const saved = await AsyncStorage.getItem('subjects');
-	console.log({ saved });
-
-	return saved ? (JSON.parse(saved) as Subject[][]) : null;
-};
-const saveStateToStorage = async (data: Subject[][] | null) => {
-	console.log({ data });
-	await AsyncStorage.setItem('subjects', JSON.stringify(data));
-};
+export type ActionType = 'STOP_LOADING' | 'START_LOADING' | 'UPDATE' | 'RESET';
 
 const hardCoded = () => {
 	faker.seed(100);
@@ -53,6 +46,8 @@ const reducer = (
 	switch (type) {
 		case 'START_LOADING':
 			return { ...state, loading: true };
+		case 'STOP_LOADING':
+			return { ...state, loading: false };
 		case 'UPDATE':
 			return {
 				subjects: payload ? payload : initialState.subjects,
@@ -68,24 +63,24 @@ const reducer = (
 
 export const useSubjectsState = () => {
 	const [state, dispatch] = useReducer(reducer, initialState);
+
+	// useEffect(() => {
+	// 	dispatch({ type: 'START_LOADING' });
+	// 	loadStateFromStorage<Subject[][]>('subjects').then(data => {
+	// 		if (!data) {
+	// 			// dispatch({ type: 'STOP_LOADING' });
+	// 			return;
+	// 		}
+	// 		dispatch({ type: 'UPDATE', payload: data });
+	// 	});
+	// }, []);
+
 	useEffect(() => {
-		// if (!state.subjects) {
-		// 	return;
-		// }
-		saveStateToStorage(state.subjects);
+		if (!state.subjects) {
+			return;
+		}
+		saveStateToStorage(state.subjects, 'subjects');
 	}, [state.subjects]);
-
-	useEffect(() => {
-		dispatch({ type: 'START_LOADING' });
-		loadStateFromStorage().then(data => {
-			if (!data) {
-				dispatch({ type: 'RESET' });
-				return;
-			}
-			dispatch({ type: 'UPDATE', payload: data });
-		});
-	}, []);
-
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 	return value;
 };

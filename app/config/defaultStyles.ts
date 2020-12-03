@@ -9,7 +9,7 @@ export default {
 		shadowOffset: { width: 3, height: 3 },
 		shadowRadius: 10,
 	},
-	title: {
+	AppLogo: {
 		fontSize: 20,
 		color: color.primary,
 		fontWeight: 'bold',
@@ -18,5 +18,10 @@ export default {
 		textAlign: 'left',
 		alignSelf: 'flex-start',
 		padding: 10,
+	} as any,
+	title: {
+		fontSize: 50,
+		color: color.black,
+		fontWeight: 'bold',
 	} as any,
 };

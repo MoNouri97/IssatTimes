@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
-	title: { ...defaultStyles.title },
+	title: { ...defaultStyles.AppLogo },
 	groupName: {
 		flexDirection: 'row',
 		justifyContent: 'center',

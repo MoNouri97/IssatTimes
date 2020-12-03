@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 
 import Tabs from './app/screens/Tabs';
@@ -10,13 +10,37 @@ import Loading from './app/components/Loading';
 import { useGroupState } from './app/context/Group/useGroupState';
 import { GroupContext } from './app/context/Group/GroupContext';
 import SelectGroup from './app/screens/SelectGroup';
+import { AppLoading } from 'expo';
+import { groupInfo, Subject } from './app/types';
+import { loadStateFromStorage } from './app/utils/ManageAsyncStorage';
 
 export default function App() {
+	console.log('app started ......');
+	const [isReady, setIsReady] = useState(false);
+
 	const subjectsValue = useSubjectsState();
 	const groupValue = useGroupState();
 
-	console.log(subjectsValue.state.loading);
+	const loadAppState = async () => {
+		const [subjectsData, groupData] = await Promise.all([
+			loadStateFromStorage<Subject[][]>('subjects'),
+			loadStateFromStorage<groupInfo>('group'),
+		]);
+		// console.log({ subjectsData, groupData });
 
+		if (subjectsData) {
+			subjectsValue.dispatch({ type: 'UPDATE', payload: subjectsData });
+		}
+
+		if (groupData) {
+			groupValue.setGroup(groupData);
+		}
+	};
+	if (!isReady) {
+		return (
+			<AppLoading startAsync={loadAppState} onFinish={() => setIsReady(true)} />
+		);
+	}
 	// return <sTestScreen />;
 	return (
 		<GroupContext.Provider value={groupValue}>
