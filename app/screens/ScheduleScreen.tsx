@@ -11,17 +11,14 @@ const ScheduleScreen: React.FC<
 	MaterialTopTabScreenProps<ParamList, 'weekDay'>
 > = ({ route }) => {
 	// context
-	const { subjects } = useContext(SubjectsContext);
-	console.log(subjects[route.params.index]);
-	console.log('week day:subjects.length ', subjects.length);
-	console.log('week day:route.params.index ', route.params.index);
+	const { state } = useContext(SubjectsContext);
 
 	return (
 		<View style={styles.container}>
 			<FlatList
 				ListEmptyComponent={LoadingIndicator}
 				style={styles.list}
-				data={subjects[route.params.index]}
+				data={state.subjects[route.params.index]}
 				keyExtractor={(item, index) => `${index}-${item.name}`}
 				contentContainerStyle={styles.listContainer}
 				renderItem={item => <Card {...item.item} />}

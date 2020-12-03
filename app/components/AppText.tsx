@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
 
 interface Props {
-	style?: StyleProp<TextStyle>;
+	style?: StyleProp<TextStyle> | undefined;
 }
 const AppText: React.FC<Props> = ({ children, style = {} }) => {
 	return <Text style={[styles.text, style]}>{children} </Text>;

@@ -1,10 +1,10 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
 	ScrollView,
 	StyleSheet,
 	TextInput,
-	TouchableHighlight,
+	TouchableOpacity,
 	View,
 } from 'react-native';
 import AppText from '../components/AppText';
@@ -13,30 +13,25 @@ import color from '../config/color';
 import { GroupContext } from '../context/Group/GroupContext';
 import { groupInfo, ParamList } from '../types';
 import { groupList } from '../utils/groupList';
-import Loading from '../components/Loading';
 
-type Props = StackScreenProps<ParamList, 'Choose Group'>;
-
-const SelectGroup: React.FC<Props> = ({ navigation: { push } }) => {
+const SelectGroup: React.FC = () => {
 	const [search, setSearch] = useState('');
 	const { setGroup } = useContext(GroupContext);
-	const [loading, setLoading] = useState(false);
+	// const [loading, setLoading] = useState(false);
 	const handleSelectGroup = (selection: groupInfo) => {
 		setSearch(selection.name);
 		setGroup!(selection);
-		setLoading(true);
+		// setLoading(true);
 		// push('Main');
 	};
-	const onDataLoaded = useCallback(() => {
-		console.log('navigate');
-		push('Main');
-	}, [push]);
+	// const onDataLoaded = useCallback(() => {
+	// 	console.log('navigate');
+	// 	push('Main');
+	// }, [push]);
 
 	return (
 		<AppScreen style={styles.bg}>
 			<View style={styles.container}>
-				<Loading onLoaded={onDataLoaded} />
-
 				<TextInput
 					style={styles.input}
 					placeholder='choose a group ...'
@@ -54,14 +49,14 @@ const SelectGroup: React.FC<Props> = ({ navigation: { push } }) => {
 						.slice(0, 3)
 						.map(grp => {
 							return (
-								<TouchableHighlight
+								<TouchableOpacity
 									key={grp.id}
 									onPress={() => {
 										handleSelectGroup(grp);
 									}}
 								>
 									<AppText style={styles.listItem}> {grp.name}</AppText>
-								</TouchableHighlight>
+								</TouchableOpacity>
 							);
 						})}
 				</ScrollView>

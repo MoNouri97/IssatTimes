@@ -1,15 +1,31 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import color from '../config/color';
+import defaultStyles from '../config/defaultStyles';
+import { GroupContext } from '../context/Group/GroupContext';
+import { SubjectsContext } from '../context/Subjects/SubjectsContext';
+import AppBtn from './AppBtn';
 import AppText from './AppText';
 
 interface Props {}
 
 const TopBar: React.FC<Props> = ({}) => {
+	const { group, setGroup } = useContext(GroupContext);
+	const { dispatch } = useContext(SubjectsContext);
 	return (
 		<View style={styles.container}>
 			<AppText style={styles.title}>ISSAT Times</AppText>
-			<AppText>FIA03-GL02</AppText>
+			<TouchableOpacity
+				style={styles.groupName}
+				onPress={() => {
+					setGroup!({ id: '', name: '' });
+					dispatch!({ type: 'RESET' });
+				}}
+			>
+				<AppText>{group?.name}</AppText>
+				<Feather name='edit' size={15} />
+			</TouchableOpacity>
 		</View>
 	);
 };
@@ -21,15 +37,11 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
-	title: {
-		fontSize: 20,
-		color: color.primary,
-		fontWeight: 'bold',
-		textTransform: 'uppercase',
-		width: '50%',
-		textAlign: 'left',
-		alignSelf: 'flex-start',
-		padding: 10,
+	title: { ...defaultStyles.title },
+	groupName: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });
 export default TopBar;

@@ -17,8 +17,7 @@ export type ParamList = {
 };
 
 export type loadingStates =
-	| 'Not Loading'
-	| 'Loading www.issatso.rnu.tn ...'
+	| 'Loading Site ...'
 	| 'Choosing Group ...'
 	| 'Collecting Data ...'
 	| 'Done';

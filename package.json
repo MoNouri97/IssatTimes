@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/material-top-tabs": "^5.3.10",
     "@react-navigation/native": "^5.8.10",
@@ -25,7 +26,8 @@
     "react-native-screens": "~2.10.1",
     "react-native-tab-view": "^2.15.2",
     "react-native-web": "~0.13.12",
-    "react-native-webview": "10.7.0"
+    "react-native-webview": "10.7.0",
+    "lottie-react-native": "~2.6.1"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

@@ -12,7 +12,7 @@ const Tab = createMaterialTopTabNavigator();
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const Tabs: React.FC = ({}) => {
 	return (
-		<AppScreen>
+		<>
 			<TopBar />
 			<View style={styles.container}>
 				<NavigationContainer independent>
@@ -28,7 +28,7 @@ const Tabs: React.FC = ({}) => {
 					</Tab.Navigator>
 				</NavigationContainer>
 			</View>
-		</AppScreen>
+		</>
 	);
 };
 const styles = StyleSheet.create({

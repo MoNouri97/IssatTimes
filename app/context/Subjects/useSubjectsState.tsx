@@ -1,17 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 import faker from 'faker';
 import { Subject } from '../../types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { InitialState } from '@react-navigation/native';
 
-export const initState = () => {
-	// const saved = localStorage.getItem('subjects');
-	// if (saved) {
-	// 	return JSON.parse(saved);
-	// }
-	const res = [];
-	for (let index = 0; index < 6; index++) {
-		res.push([]);
-	}
-	return res;
+export type SubjectsState = {
+	subjects: Subject[][];
+	loading: boolean;
+};
+export type ActionType = 'START_LOADING' | 'UPDATE' | 'RESET';
+
+const loadStateFromStorage = async () => {
+	const saved = await AsyncStorage.getItem('subjects');
+	console.log({ saved });
+
+	return saved ? (JSON.parse(saved) as Subject[][]) : null;
+};
+const saveStateToStorage = async (data: Subject[][]) => {
+	await AsyncStorage.setItem('subjects', JSON.stringify(data));
 };
 
 const hardCoded = () => {
@@ -34,14 +40,48 @@ const hardCoded = () => {
 	return temp;
 };
 
+export const initialState: SubjectsState = {
+	subjects: [[], [], [], [], [], []],
+	loading: true,
+};
+
+const reducer = (
+	state = initialState,
+	{ type, payload }: { type: ActionType; payload?: Subject[][] },
+): SubjectsState => {
+	switch (type) {
+		case 'START_LOADING':
+			return { ...state, loading: true };
+		case 'UPDATE':
+			return {
+				subjects: payload ? payload : initialState.subjects,
+				loading: false,
+			};
+		case 'RESET':
+			return initialState;
+
+		default:
+			return state;
+	}
+};
+
 export const useSubjectsState = () => {
-	const [subjects, setSubjects] = useState<Subject[][]>(initState);
+	const [state, dispatch] = useReducer(reducer, initialState);
 	// useEffect(() => {
-	// 	localStorage.setItem('subjects', JSON.stringify(subjects));
-	// }, [subjects]);
-	const value = useMemo(() => ({ subjects, setSubjects }), [
-		subjects,
-		setSubjects,
-	]);
+	// 	saveStateToStorage(state.subjects);
+	// }, [state.subjects]);
+
+	// useEffect(() => {
+	// 	dispatch({ type: 'START_LOADING' });
+	// 	loadStateFromStorage().then(data => {
+	// 		if (!data) {
+	// 			dispatch({ type: 'RESET' });
+	// 			return;
+	// 		}
+	// 		dispatch({ type: 'UPDATE', payload: data });
+	// 	});
+	// }, []);
+
+	const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 	return value;
 };

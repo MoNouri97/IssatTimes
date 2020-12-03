@@ -1,3 +1,6 @@
+import { StyleProp, TextStyle } from 'react-native';
+import color from './color';
+
 export default {
 	shadow: {
 		elevation: 10,
@@ -6,4 +9,14 @@ export default {
 		shadowOffset: { width: 3, height: 3 },
 		shadowRadius: 10,
 	},
+	title: {
+		fontSize: 20,
+		color: color.primary,
+		fontWeight: 'bold',
+		textTransform: 'uppercase',
+		width: '50%',
+		textAlign: 'left',
+		alignSelf: 'flex-start',
+		padding: 10,
+	} as any,
 };
