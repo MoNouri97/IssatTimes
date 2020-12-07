@@ -7,6 +7,7 @@ import {
 	loadStateFromStorage,
 	saveStateToStorage,
 } from '../../utils/ManageAsyncStorage';
+import { keys } from '../../config/vars';
 
 export type SubjectsState = {
 	subjects: Subject[][] | null;
@@ -79,7 +80,7 @@ export const useSubjectsState = () => {
 		if (!state.subjects) {
 			return;
 		}
-		saveStateToStorage(state.subjects, 'subjects');
+		saveStateToStorage(state.subjects, keys.SUBJECTS);
 	}, [state.subjects]);
 	const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 	return value;

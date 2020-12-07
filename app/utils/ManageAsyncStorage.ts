@@ -7,7 +7,7 @@ export const loadStateFromStorage = async <T>(key: string) => {
 
 	return loaded ? (JSON.parse(loaded) as T) : null;
 };
-export const saveStateToStorage = async (toSave: any | null, key: string) => {
-	await AsyncStorage.setItem(key, JSON.stringify(toSave));
+export const saveStateToStorage = (toSave: any | null, key: string) => {
+	AsyncStorage.setItem(key, JSON.stringify(toSave));
 	console.log(`Saved ${key}`);
 };

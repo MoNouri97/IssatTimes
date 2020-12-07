@@ -12,3 +12,11 @@ export const fetchIssat = (body?: any, cookie: string = '') => {
 		body: JSON.stringify(body),
 	});
 };
+
+export const fetchHtml = async (url: string) => {
+	const data = await fetch(url, {
+		method: 'GET',
+	});
+
+	return data.text();
+};

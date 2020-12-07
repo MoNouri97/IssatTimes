@@ -6,6 +6,9 @@ import { loadingStates, Subject } from '../types';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 import { GroupContext } from '../context/Group/GroupContext';
 import { scrapData } from '../utils/scrapData';
+import { saveStateToStorage } from '../utils/ManageAsyncStorage';
+import { getUpdateDate } from '../utils/getUpdateDate';
+import { keys } from '../config/vars';
 
 interface Props {
 	// onDataLoad: (data: Subject[][]) => void;
@@ -21,7 +24,7 @@ const WebScrap: React.FC<Props> = ({ loadingState, setLoadingState }) => {
 	const injectedJs = `
 			const tab = document.querySelector("#dvContainer");
 			if(tab){
-				window.ReactNativeWebView.postMessage(tab.innerHTML)
+				window.ReactNativeWebView.postMessage(document.querySelector("html").innerHTML)
 			}else{
 				document.querySelector("#form1 > table > tbody > tr > td:nth-child(2) > select").value = '${
 					group!.id
@@ -43,12 +46,17 @@ const WebScrap: React.FC<Props> = ({ loadingState, setLoadingState }) => {
 		console.log(`injected : group id'${group!.id}'`);
 	};
 
-	const handleOnMessage = async (event: WebViewMessageEvent) => {
-		const week: Subject[][] = scrapData(event);
+	const handleOnMessage = (event: WebViewMessageEvent) => {
+		const html = event.nativeEvent.data;
+		const week: Subject[][] = scrapData(html);
+		console.log('done');
 
 		if (dispatch) {
 			setLoadingState('Done');
 			dispatch({ type: 'UPDATE', payload: week });
+			const updateDate = getUpdateDate(html);
+			console.log({ updateDate });
+			saveStateToStorage(updateDate, keys.LAST_UPDATE);
 		} else {
 			console.log('error : dispatch is undefined');
 		}

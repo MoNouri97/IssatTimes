@@ -1,12 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import Card from '../components/Card';
 import { ParamList } from '../types';
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 import AppBtn from '../components/AppBtn';
+import { fetchHtml } from '../utils/fetchIssat';
+import { getUpdateDate } from '../utils/getUpdateDate';
+import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
+import { keys } from '../config/vars';
 
 const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
+
 const ScheduleScreen: React.FC<
 	MaterialTopTabScreenProps<ParamList, 'weekDay'>
 > = ({ route }) => {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { keys } from '../../config/vars';
 import { groupInfo } from '../../types';
 import {
 	loadStateFromStorage,
@@ -7,21 +8,14 @@ import {
 
 export const useGroupState = () => {
 	const [group, setGroup] = useState<groupInfo>({ id: '', name: '' });
-	// useEffect(() => {
-	// 	loadStateFromStorage<groupInfo>('group').then(data => {
-	// 		if (!data) {
-	// 			return;
-	// 		}
-	// 		setGroup(data);
-	// 	});
-	// }, []);
 
 	useEffect(() => {
 		if (!group) {
 			return;
 		}
-		saveStateToStorage(group, 'group');
+		saveStateToStorage(group, keys.GROUP);
 	}, [group]);
+
 	return {
 		group,
 		setGroup,

@@ -1,9 +1,8 @@
-import { WebViewMessageEvent } from 'react-native-webview';
 import cheerioRN from 'react-native-cheerio';
 import { Subject } from '../types';
 
-export const scrapData = (event: WebViewMessageEvent) => {
-	const $ = cheerioRN.load(event.nativeEvent.data);
+export const scrapData = (html: string) => {
+	const $ = cheerioRN.load(html);
 
 	// needed vars
 	const week: Subject[][] = [];
@@ -12,13 +11,13 @@ export const scrapData = (event: WebViewMessageEvent) => {
 
 	try {
 		// extracting columns
-		const days = $('.table-striped td:nth-child(1)');
-		const times = $('.table-striped td:nth-child(2)');
-		const subjects = $('.table-striped td:nth-child(5)');
-		const teachers = $('.table-striped td:nth-child(6)');
-		const types = $('.table-striped td:nth-child(7)');
-		const locations = $('.table-striped td:nth-child(8)');
-		const regimes = $('.table-striped td:nth-child(9)');
+		const days = $('#dvContainer .table-striped td:nth-child(1)');
+		const times = $('#dvContainer .table-striped td:nth-child(2)');
+		const subjects = $('#dvContainer .table-striped td:nth-child(5)');
+		const teachers = $('#dvContainer .table-striped td:nth-child(6)');
+		const types = $('#dvContainer .table-striped td:nth-child(7)');
+		const locations = $('#dvContainer .table-striped td:nth-child(8)');
+		const regimes = $('#dvContainer .table-striped td:nth-child(9)');
 
 		days.each((i: any, d: any) => {
 			const day = $(d).text() as string;

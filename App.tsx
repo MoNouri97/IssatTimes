@@ -13,9 +13,9 @@ import SelectGroup from './app/screens/SelectGroup';
 import { AppLoading } from 'expo';
 import { groupInfo, Subject } from './app/types';
 import { loadStateFromStorage } from './app/utils/ManageAsyncStorage';
+import { keys } from './app/config/vars';
 
 export default function App() {
-	console.log('app started ......');
 	const [isReady, setIsReady] = useState(false);
 
 	const subjectsValue = useSubjectsState();
@@ -23,8 +23,8 @@ export default function App() {
 
 	const loadAppState = async () => {
 		const [subjectsData, groupData] = await Promise.all([
-			loadStateFromStorage<Subject[][]>('subjects'),
-			loadStateFromStorage<groupInfo>('group'),
+			loadStateFromStorage<Subject[][]>(keys.SUBJECTS),
+			loadStateFromStorage<groupInfo>(keys.GROUP),
 		]);
 		// console.log({ subjectsData, groupData });
 
@@ -41,6 +41,7 @@ export default function App() {
 			<AppLoading startAsync={loadAppState} onFinish={() => setIsReady(true)} />
 		);
 	}
+
 	// return <sTestScreen />;
 	return (
 		<GroupContext.Provider value={groupValue}>
