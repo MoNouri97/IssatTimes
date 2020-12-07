@@ -39,7 +39,7 @@ const Tabs: React.FC = ({}) => {
 			if (shouldUpdate) {
 				console.log('should update ...');
 			} else {
-				alert('should not update ...');
+				//alert('should not update ...');
 				console.log('should not update ...');
 			}
 		});
