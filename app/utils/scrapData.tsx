@@ -7,7 +7,10 @@ export const scrapData = (html: string) => {
 	// needed vars
 	const week: Subject[][] = [];
 	let dayArray: Subject[] = [];
-	let dayNbr = -1;
+	// is used to track the last day to insert the 2nd group hours:
+	// [mon,tue,wed,thur,fri,sat,
+	// 2ndGroup - mon, 2ndGroup - tue, 2ndGroup - wed, 2ndGroup - thur, 2ndGroup - fri, 2ndGroup - sat]
+	let lastDay: string = '';
 
 	try {
 		// extracting columns
@@ -50,16 +53,23 @@ export const scrapData = (html: string) => {
 					return;
 				}
 				if (dayArray.length > 0) {
-					week.push(dayArray);
+					addDay(week, lastDay, dayArray);
+					lastDay = day;
 					dayArray = [];
 				}
-				dayNbr += 1;
 			}
 		});
 		// the last day needs to be added
-		week.push(dayArray);
+		addDay(week, lastDay, dayArray);
 	} catch (error) {
 		console.log(error.message);
 	}
+	// console.log(week);
+
 	return week;
 };
+function addDay(week: Subject[][], lastDay: string, dayArray: Subject[]) {
+	if (week.length > 5) {
+		week[parseInt(lastDay[0]) + 5] = [...dayArray];
+	} else week.push(dayArray);
+}
