@@ -18,7 +18,6 @@ const checkForUpdate = async () => {
 	);
 	const lastUpdate = getUpdateDate(html);
 	const lastSavedUpdate = await loadStateFromStorage<Date>(keys.LAST_UPDATE);
-	console.log({ lastUpdate, lastSavedUpdate });
 	if (!lastSavedUpdate || lastUpdate > lastSavedUpdate) {
 		// show alert for update
 		return true;
@@ -37,9 +36,9 @@ const Tabs: React.FC = ({}) => {
 		}
 		checkForUpdate().then(shouldUpdate => {
 			if (shouldUpdate) {
+				alert('should update ...');
 				console.log('should update ...');
 			} else {
-				//alert('should not update ...');
 				console.log('should not update ...');
 			}
 		});
@@ -56,14 +55,16 @@ const Tabs: React.FC = ({}) => {
 						lazyPreloadDistance={1}
 						// tabBar={AppTabBar}
 					>
-						{days.map((day, i) => (
-							<Tab.Screen
-								key={i}
-								name={day}
-								component={ScheduleScreen}
-								initialParams={{ index: i }}
-							/>
-						))}
+						{subjectState.state.subjects?.map((day, i) =>
+							!day ? null : (
+								<Tab.Screen
+									key={i}
+									name={'' + i}
+									component={ScheduleScreen}
+									initialParams={{ index: i }}
+								/>
+							),
+						)}
 					</Tab.Navigator>
 				</NavigationContainer>
 			</View>

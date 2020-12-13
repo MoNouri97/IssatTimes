@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import Card from '../components/Card';
 import { ParamList } from '../types';
@@ -17,13 +17,36 @@ const ScheduleScreen: React.FC<
 > = ({ route }) => {
 	// context
 	const { state } = useContext(SubjectsContext);
+	const groupData = useMemo(() => {
+		console.log('----------------------------');
+
+		if (!state.subjects) return [];
+		let day = state.subjects[route.params.index];
+		let secGrpIdx = 0;
+
+		if (state?.subjects[route.params.index + 6]?.length) {
+			day = day.map(subject => {
+				// day x -> 2nd group day is x + 6
+				const res = state.subjects![route.params.index + 6].find(
+					({ time }, idx) => time == subject.time && idx >= secGrpIdx,
+				);
+				if (res) {
+					console.log({ res, secGrpIdx });
+					secGrpIdx++;
+				}
+
+				return res ? { ...res, name: res.name + '**(2)' } : subject;
+			});
+		}
+		return day;
+	}, [state.subjects]);
 
 	return (
 		<View style={styles.container}>
 			<FlatList
 				ListEmptyComponent={LoadingIndicator}
 				style={styles.list}
-				data={state.subjects ? state.subjects[route.params.index] : []}
+				data={groupData}
 				keyExtractor={(item, index) => `${index}-${item.name}`}
 				contentContainerStyle={styles.listContainer}
 				renderItem={item => <Card {...item.item} />}

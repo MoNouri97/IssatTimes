@@ -1,39 +1,16 @@
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer } from 'react';
 import faker from 'faker';
 import { Subject } from '../../types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { InitialState } from '@react-navigation/native';
-import {
-	loadStateFromStorage,
-	saveStateToStorage,
-} from '../../utils/ManageAsyncStorage';
+import { saveStateToStorage } from '../../utils/ManageAsyncStorage';
 import { keys } from '../../config/vars';
 
 export type SubjectsState = {
+	// [mon,tue,wed,thur,fri,sat,
+	// another 5 days for 2nd group specific subjects]
 	subjects: Subject[][] | null;
 	loading: boolean;
 };
 export type ActionType = 'STOP_LOADING' | 'START_LOADING' | 'UPDATE' | 'RESET';
-
-const hardCoded = () => {
-	faker.seed(100);
-	const temp: Subject[][] = [];
-	for (let idx = 0; idx < 6; idx++) {
-		const element = [];
-		for (let j = 0; j < 5; j++) {
-			element.push({
-				name: faker.company.companyName(),
-				teacher: faker.name.findName(),
-				location: faker.address.county(),
-				type: 'TD' as const,
-				regime: 'H',
-				time: ('s' + idx.toString()) as any,
-			});
-		}
-		temp.push(element);
-	}
-	return temp;
-};
 
 export const initialState: SubjectsState = {
 	subjects: null,
@@ -64,17 +41,6 @@ const reducer = (
 
 export const useSubjectsState = () => {
 	const [state, dispatch] = useReducer(reducer, initialState);
-
-	// useEffect(() => {
-	// 	dispatch({ type: 'START_LOADING' });
-	// 	loadStateFromStorage<Subject[][]>('subjects').then(data => {
-	// 		if (!data) {
-	// 			// dispatch({ type: 'STOP_LOADING' });
-	// 			return;
-	// 		}
-	// 		dispatch({ type: 'UPDATE', payload: data });
-	// 	});
-	// }, []);
 
 	useEffect(() => {
 		if (!state.subjects) {

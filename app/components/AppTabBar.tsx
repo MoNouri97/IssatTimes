@@ -47,7 +47,11 @@ const AppTabBar: React.FC<MaterialTopTabBarProps> = ({
 				const inputRange = state.routes.map((_, i) => i);
 				const opacity = Animated.interpolate(position, {
 					inputRange,
-					outputRange: inputRange.map(i => (i === index ? 1 : 0.5)),
+					outputRange: inputRange.map(i => (i === index ? 1 : 0.1)),
+				});
+				const scale = Animated.interpolate(position, {
+					inputRange,
+					outputRange: inputRange.map(i => (i === index ? 2 : 1)),
 				});
 				// const opacity = Animated.int
 
@@ -61,6 +65,7 @@ const AppTabBar: React.FC<MaterialTopTabBarProps> = ({
 								margin: 5,
 								padding: 5,
 								textAlign: 'center',
+								transform: [{ scale }],
 							}}
 						>
 							{label}

@@ -9,6 +9,7 @@ export interface Subject {
 export type groupInfo = {
 	id: string;
 	name: string;
+	subGroup: 1 | 2;
 };
 export type ParamList = {
 	weekDay: { index: number };

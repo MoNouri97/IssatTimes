@@ -52,11 +52,12 @@ export default function App() {
 				) : (
 					<AppScreen>
 						<View style={styles.container}>
-							<NavigationContainer>
-								<Tabs />
-							</NavigationContainer>
-							{subjectsValue.state.loading && (
+							{subjectsValue.state.loading ? (
 								<Loading onLoaded={() => console.log('loaded')} />
+							) : (
+								<NavigationContainer>
+									<Tabs />
+								</NavigationContainer>
 							)}
 						</View>
 					</AppScreen>

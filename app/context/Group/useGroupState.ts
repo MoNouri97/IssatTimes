@@ -7,7 +7,11 @@ import {
 } from '../../utils/ManageAsyncStorage';
 
 export const useGroupState = () => {
-	const [group, setGroup] = useState<groupInfo>({ id: '', name: '' });
+	const [group, setGroup] = useState<groupInfo>({
+		id: '',
+		name: '',
+		subGroup: 1,
+	});
 
 	useEffect(() => {
 		if (!group) {
