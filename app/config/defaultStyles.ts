@@ -21,7 +21,7 @@ export default {
 	} as any,
 	title: {
 		fontSize: 50,
-		color: color.black,
+		color: color.fg,
 		fontWeight: 'bold',
 	} as any,
 };

@@ -9,6 +9,7 @@ import { fetchHtml } from '../utils/fetchIssat';
 import { getUpdateDate } from '../utils/getUpdateDate';
 import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
 import { keys } from '../config/vars';
+import color from '../config/color';
 
 const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
 
@@ -56,9 +57,9 @@ const ScheduleScreen: React.FC<
 };
 const styles = StyleSheet.create({
 	container: {
-		// backgroundColor: 'dodgerblue',
-		// backgroundColor: color.white,
+		backgroundColor: color.bg,
 		width: '100%',
+		flex: 1,
 	},
 	list: {
 		width: '100%',

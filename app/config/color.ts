@@ -1,9 +1,9 @@
 export default {
-	primary: '#fc5c65',
-	secondary: '#4ecdc4',
+	primary: '#525298',
+	secondary: '#22AD7B',
 	black: '#333',
-	// white: '#efefef',
-	white: '#fff',
-	light: '#f1f1f1',
+	fg: '#ddd',
+	lighter: '#252836',
+	bg: '#1F1D2B',
 	medium: '#bbb',
 };

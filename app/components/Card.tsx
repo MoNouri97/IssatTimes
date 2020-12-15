@@ -53,7 +53,7 @@ const AppCard: React.FC<Subject> = ({
 					{ backgroundColor: type === 'C' ? color.primary : color.secondary },
 				]}
 			>
-				<Feather name='user' size={20} color={color.white} />
+				<Feather name='user' size={20} color={color.lighter} />
 				<AppText style={styles.tagText}>{teacher}</AppText>
 			</View>
 			<View style={[styles.titleContainer]}>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
 	},
 	mainContent: {
 		// height: 280,
-		backgroundColor: color.white,
+		backgroundColor: color.lighter,
 		// backgroundColor: color.light,
 		borderRadius: 20,
 		flex: 1,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
 	},
 	tagText: {
 		marginHorizontal: 10,
-		color: color.white,
+		color: color.medium,
 		fontSize: 15,
 	},
 	time: {
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 15,
 		textTransform: 'uppercase',
-		color: color.black,
+		color: color.fg,
 		fontWeight: 'bold',
 		flexShrink: 1,
 		maxWidth: '50%',
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
 		fontSize: 50,
 		zIndex: -1,
 		fontWeight: 'bold',
-		color: color.light,
+		color: color.bg,
 	},
 
 	textContainer: {

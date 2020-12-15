@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform, StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
+import color from '../config/color';
 
 interface Props {
 	style?: StyleProp<TextStyle> | undefined;
@@ -10,6 +11,7 @@ const AppText: React.FC<Props> = ({ children, style = {} }) => {
 
 const styles = StyleSheet.create({
 	text: {
+		color: color.fg,
 		...Platform.select({
 			android: {
 				fontSize: 18,

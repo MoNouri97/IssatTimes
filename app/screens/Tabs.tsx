@@ -5,12 +5,13 @@ import React, { useContext, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import TopBar from '../components/TopBar';
 import { NavigationContainer } from '@react-navigation/native';
-import AppTabBar from '../components/AppTabBar';
 import { keys } from '../config/vars';
 import { fetchHtml } from '../utils/fetchIssat';
 import { getUpdateDate } from '../utils/getUpdateDate';
 import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
+import color from '../config/color';
+import AppTabBar from '../components/AppTabBar';
 
 const checkForUpdate = async () => {
 	const html = await fetchHtml(
@@ -24,9 +25,19 @@ const checkForUpdate = async () => {
 	}
 	return false;
 };
-
+const MyTheme = {
+	dark: true,
+	colors: {
+		primary: color.primary,
+		background: color.bg,
+		card: color.bg,
+		text: color.fg,
+		border: color.bg,
+		notification: color.primary,
+	},
+};
 const Tab = createMaterialTopTabNavigator();
-const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const days = ['Mon\n14', 'Tue\n15', 'Wed\n16', 'Thu\n17', 'Fri\n18', 'Sat\n19'];
 const Tabs: React.FC = ({}) => {
 	const subjectState = useContext(SubjectsContext);
 
@@ -48,23 +59,22 @@ const Tabs: React.FC = ({}) => {
 		<>
 			<TopBar />
 			<View style={styles.container}>
-				<NavigationContainer independent>
+				<NavigationContainer independent theme={MyTheme}>
 					<Tab.Navigator
+						style={{ backgroundColor: color.bg }}
 						backBehavior='none'
 						lazy
-						lazyPreloadDistance={1}
-						// tabBar={AppTabBar}
+						lazyPreloadDistance={3}
+						tabBar={AppTabBar}
 					>
-						{subjectState.state.subjects?.map((day, i) =>
-							!day ? null : (
-								<Tab.Screen
-									key={i}
-									name={'' + i}
-									component={ScheduleScreen}
-									initialParams={{ index: i }}
-								/>
-							),
-						)}
+						{days.map((day, i) => (
+							<Tab.Screen
+								key={i}
+								name={day}
+								component={ScheduleScreen}
+								initialParams={{ index: i }}
+							/>
+						))}
 					</Tab.Navigator>
 				</NavigationContainer>
 			</View>
@@ -75,7 +85,6 @@ const styles = StyleSheet.create({
 	container: {
 		width: '100%',
 		flex: 1,
-		backgroundColor: '#fff',
 	},
 });
 export default Tabs;

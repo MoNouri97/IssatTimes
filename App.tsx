@@ -14,6 +14,9 @@ import { AppLoading } from 'expo';
 import { groupInfo, Subject } from './app/types';
 import { loadStateFromStorage } from './app/utils/ManageAsyncStorage';
 import { keys } from './app/config/vars';
+import color from './app/config/color';
+import TestScreen from './app/screens/TestScreen';
+import { DefaultTheme, DarkTheme } from '@react-navigation/native';
 
 export default function App() {
 	const [isReady, setIsReady] = useState(false);
@@ -42,34 +45,34 @@ export default function App() {
 		);
 	}
 
-	// return <sTestScreen />;
+	// return <TestScreen />;
 	return (
-		<GroupContext.Provider value={groupValue}>
-			<StatusBar backgroundColor='#fff' barStyle='dark-content' />
-			<SubjectsContext.Provider value={subjectsValue}>
-				{!groupValue.group.id ? (
-					<SelectGroup />
-				) : (
-					<AppScreen>
+		<AppScreen style={styles.container}>
+			<GroupContext.Provider value={groupValue}>
+				<StatusBar backgroundColor={color.bg} barStyle='light-content' />
+				<SubjectsContext.Provider value={subjectsValue}>
+					{!groupValue.group.id ? (
+						<SelectGroup />
+					) : (
 						<View style={styles.container}>
 							{subjectsValue.state.loading ? (
 								<Loading onLoaded={() => console.log('loaded')} />
 							) : (
-								<NavigationContainer>
+								<NavigationContainer theme={DarkTheme}>
 									<Tabs />
 								</NavigationContainer>
 							)}
 						</View>
-					</AppScreen>
-				)}
-			</SubjectsContext.Provider>
-		</GroupContext.Provider>
+					)}
+				</SubjectsContext.Provider>
+			</GroupContext.Provider>
+		</AppScreen>
 	);
 }
 const styles = StyleSheet.create({
 	container: {
 		width: '100%',
-		flex: 1,
-		backgroundColor: '#fff',
+		flexGrow: 1,
+		backgroundColor: color.bg,
 	},
 });

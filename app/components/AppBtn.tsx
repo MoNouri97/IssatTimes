@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 		elevation: 10,
 	},
 	text: {
-		color: color.white,
+		color: color.lighter,
 		fontSize: 15,
 		textTransform: 'uppercase',
 		fontWeight: 'bold',

@@ -74,7 +74,7 @@ const SelectGroup: React.FC = () => {
 };
 const styles = StyleSheet.create({
 	bg: {
-		backgroundColor: color.white,
+		backgroundColor: color.lighter,
 	},
 	container: {
 		width: '80%',
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
 		minWidth: 30,
 	},
 	inputContainer: {
-		backgroundColor: color.light,
+		backgroundColor: color.bg,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 		// margin: 10,
 	},
 	list: {
-		backgroundColor: color.light,
+		backgroundColor: color.bg,
 		marginTop: 10,
 		borderRadius: 5,
 		maxHeight: '80%',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 	},
 	subBtn: {
 		backgroundColor: color.black,
-		color: color.white,
+		color: color.lighter,
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderRadius: 5,
