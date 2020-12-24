@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	mainContent: {
-		// height: 280,
 		backgroundColor: color.lighter,
 		// backgroundColor: color.light,
 		borderRadius: 20,
@@ -134,11 +133,10 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		alignItems: 'center',
 		...defaultStyles.shadow,
-		opacity: 0.8,
 	},
 	tagText: {
 		marginHorizontal: 10,
-		color: color.medium,
+		color: color.fg,
 		fontSize: 15,
 	},
 	time: {

@@ -1,7 +1,7 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ScheduleScreen from './ScheduleScreen';
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import TopBar from '../components/TopBar';
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,6 +12,8 @@ import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 import color from '../config/color';
 import AppTabBar from '../components/AppTabBar';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ParamList } from '../types';
 
 const checkForUpdate = async () => {
 	const html = await fetchHtml(
@@ -37,8 +39,12 @@ const MyTheme = {
 	},
 };
 const Tab = createMaterialTopTabNavigator();
-const days = ['Mon\n14', 'Tue\n15', 'Wed\n16', 'Thu\n17', 'Fri\n18', 'Sat\n19'];
-const Tabs: React.FC = ({}) => {
+const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+interface props {
+	navigation: StackNavigationProp<ParamList, 'Main'>;
+}
+const Tabs: React.FC<props> = ({ navigation }) => {
 	const subjectState = useContext(SubjectsContext);
 
 	useEffect(() => {
@@ -55,21 +61,32 @@ const Tabs: React.FC = ({}) => {
 		});
 	}, [subjectState.state.loading]);
 
+	const dayTabs = useMemo(() => {
+		const d = new Date();
+		const today = d.getDay() - 1;
+		const todayDate = d.getDate();
+
+		return days.map((day, i) => {
+			const date = todayDate + (i + 1 - today);
+			return `${day}\n${date}`;
+		});
+	}, []);
+
 	return (
 		<>
-			<TopBar />
+			<TopBar onConfigPress={() => navigation.navigate('Settings')} />
 			<View style={styles.container}>
 				<NavigationContainer independent theme={MyTheme}>
 					<Tab.Navigator
 						style={{ backgroundColor: color.bg }}
-						backBehavior='none'
+						// backBehavior='none'
 						lazy
 						lazyPreloadDistance={3}
-						tabBar={AppTabBar}
+						// tabBar={props => <AppTabBar {...props} />}
 					>
-						{days.map((day, i) => (
+						{dayTabs.map((day, i) => (
 							<Tab.Screen
-								key={i}
+								key={day}
 								name={day}
 								component={ScheduleScreen}
 								initialParams={{ index: i }}

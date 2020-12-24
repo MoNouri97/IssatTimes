@@ -16,7 +16,10 @@ import { loadStateFromStorage } from './app/utils/ManageAsyncStorage';
 import { keys } from './app/config/vars';
 import color from './app/config/color';
 import TestScreen from './app/screens/TestScreen';
-import { DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import settingsScreen from './app/screens/settingsScreen';
+
+const Stack = createStackNavigator();
 
 export default function App() {
 	const [isReady, setIsReady] = useState(false);
@@ -58,8 +61,11 @@ export default function App() {
 							{subjectsValue.state.loading ? (
 								<Loading onLoaded={() => console.log('loaded')} />
 							) : (
-								<NavigationContainer theme={DarkTheme}>
-									<Tabs />
+								<NavigationContainer>
+									<Stack.Navigator headerMode='none'>
+										<Stack.Screen name='Home' component={Tabs} />
+										<Stack.Screen name='Settings' component={settingsScreen} />
+									</Stack.Navigator>
 								</NavigationContainer>
 							)}
 						</View>

@@ -15,6 +15,7 @@ export type ParamList = {
 	weekDay: { index: number };
 	Main: undefined;
 	'Choose Group': {};
+	Settings: undefined;
 };
 
 export type loadingStates =

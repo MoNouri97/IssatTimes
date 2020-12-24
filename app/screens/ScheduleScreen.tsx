@@ -1,14 +1,10 @@
-import React, { useContext, useEffect, useMemo, useRef } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import Card from '../components/Card';
 import { ParamList } from '../types';
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 import AppBtn from '../components/AppBtn';
-import { fetchHtml } from '../utils/fetchIssat';
-import { getUpdateDate } from '../utils/getUpdateDate';
-import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
-import { keys } from '../config/vars';
 import color from '../config/color';
 
 const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
@@ -19,8 +15,6 @@ const ScheduleScreen: React.FC<
 	// context
 	const { state } = useContext(SubjectsContext);
 	const groupData = useMemo(() => {
-		console.log('----------------------------');
-
 		if (!state.subjects) return [];
 		let day = state.subjects[route.params.index];
 		let secGrpIdx = 0;
@@ -32,7 +26,6 @@ const ScheduleScreen: React.FC<
 					({ time }, idx) => time == subject.time && idx >= secGrpIdx,
 				);
 				if (res) {
-					console.log({ res, secGrpIdx });
 					secGrpIdx++;
 				}
 

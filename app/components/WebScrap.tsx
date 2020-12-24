@@ -72,9 +72,9 @@ const WebScrap: React.FC<Props> = ({ loadingState, setLoadingState }) => {
 
 	return (
 		<WebView
-			startInLoadingState={false}
+			// startInLoadingState={false}
 			containerStyle={{ display: 'none' }}
-			// containerStyle={{ height: 0, width: 0, display: 'none' }}
+			// containerStyle={{ width: '100%' }}
 			ref={webViewRef}
 			onLoadEnd={handleOnLoad}
 			originWhitelist={['*']}

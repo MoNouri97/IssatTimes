@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import {
+	Pressable,
 	ScrollView,
 	StyleSheet,
 	TextInput,
@@ -38,16 +39,26 @@ const SelectGroup: React.FC = () => {
 						<TextInput
 							style={styles.input}
 							placeholder='type to search'
+							placeholderTextColor={color.medium}
 							value={search}
 							onChange={e => {
 								setSearch(e.nativeEvent.text);
 							}}
 						/>
-						<Feather style={styles.inputIcon} name='search' size={15} />
+						<Feather
+							style={styles.inputIcon}
+							name='search'
+							size={15}
+							color={color.fg}
+						/>
 					</View>
-					<TouchableOpacity onPress={toggleSubGroup}>
-						<AppText style={[styles.subBtn]}>{subGroup}</AppText>
-					</TouchableOpacity>
+					<Pressable
+						android_ripple={{ borderless: false, color: color.bg }}
+						onPress={toggleSubGroup}
+						style={[styles.subBtn]}
+					>
+						<AppText>{subGroup}</AppText>
+					</Pressable>
 				</View>
 				<ScrollView style={styles.list}>
 					{groupList
@@ -74,13 +85,14 @@ const SelectGroup: React.FC = () => {
 };
 const styles = StyleSheet.create({
 	bg: {
-		backgroundColor: color.lighter,
+		backgroundColor: color.bg,
 	},
 	container: {
 		width: '80%',
 		// paddingTop: 50,
 	},
 	input: {
+		color: color.fg,
 		fontSize: 20,
 		flex: 1,
 		padding: 20,
@@ -89,16 +101,15 @@ const styles = StyleSheet.create({
 		minWidth: 30,
 	},
 	inputContainer: {
-		backgroundColor: color.bg,
+		backgroundColor: color.lighter,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		borderRadius: 5,
 		flex: 1,
-		// margin: 10,
 	},
 	list: {
-		backgroundColor: color.bg,
+		backgroundColor: color.lighter,
 		marginTop: 10,
 		borderRadius: 5,
 		maxHeight: '80%',
@@ -111,10 +122,11 @@ const styles = StyleSheet.create({
 		color: color.medium,
 	},
 	subBtn: {
-		backgroundColor: color.black,
-		color: color.lighter,
+		backgroundColor: color.lighter,
+		color: color.fg,
 		flexDirection: 'row',
 		alignItems: 'center',
+		justifyContent: 'center',
 		borderRadius: 5,
 		width: 70,
 		marginLeft: 10,
@@ -126,6 +138,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		alignItems: 'center',
 		justifyContent: 'space-between',
+		marginTop: 30,
 	},
 });
 export default SelectGroup;
