@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import TopBar from '../components/TopBar';
 import { NavigationContainer } from '@react-navigation/native';
-import { keys } from '../config/vars';
+import { keys, MyTheme } from '../config/vars';
 import { fetchHtml } from '../utils/fetchIssat';
 import { getUpdateDate } from '../utils/getUpdateDate';
 import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
@@ -27,17 +27,7 @@ const checkForUpdate = async () => {
 	}
 	return false;
 };
-const MyTheme = {
-	dark: true,
-	colors: {
-		primary: color.primary,
-		background: color.bg,
-		card: color.bg,
-		text: color.fg,
-		border: color.bg,
-		notification: color.primary,
-	},
-};
+
 const Tab = createMaterialTopTabNavigator();
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 

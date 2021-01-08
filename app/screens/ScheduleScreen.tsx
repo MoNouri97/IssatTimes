@@ -6,6 +6,7 @@ import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 import AppBtn from '../components/AppBtn';
 import color from '../config/color';
+import { GroupContext } from '../context/Group/GroupContext';
 
 const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
 
@@ -14,11 +15,20 @@ const ScheduleScreen: React.FC<
 > = ({ route }) => {
 	// context
 	const { state } = useContext(SubjectsContext);
+	const { group } = useContext(GroupContext);
+
 	const groupData = useMemo(() => {
 		if (!state.subjects) return [];
+
 		let day = state.subjects[route.params.index];
 		let secGrpIdx = 0;
 
+		// 1st group , nothing to do
+		if (group?.subGroup == 1) {
+			return day;
+		}
+
+		// 2nd group , need to account for 2nd group times
 		if (state?.subjects[route.params.index + 6]?.length) {
 			day = day.map(subject => {
 				// day x -> 2nd group day is x + 6
@@ -29,11 +39,11 @@ const ScheduleScreen: React.FC<
 					secGrpIdx++;
 				}
 
-				return res ? { ...res, name: res.name + '**(2)' } : subject;
+				return res ? { ...res, name: res.name + ' (G2)' } : subject;
 			});
 		}
 		return day;
-	}, [state.subjects]);
+	}, [state.subjects, group]);
 
 	return (
 		<View style={styles.container}>

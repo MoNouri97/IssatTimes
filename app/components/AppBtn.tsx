@@ -1,6 +1,7 @@
 import React from 'react';
 import {
 	GestureResponderEvent,
+	Pressable,
 	StyleProp,
 	StyleSheet,
 	TouchableOpacity,
@@ -27,9 +28,13 @@ const AppBtn: React.FC<Props> = ({
 	};
 
 	return (
-		<TouchableOpacity style={[btnStyle, style]} onPress={onPress}>
-			<AppText style={styles.text}>{children}</AppText>
-		</TouchableOpacity>
+		<Pressable
+			style={[btnStyle, style]}
+			onPress={onPress}
+			android_ripple={{ borderless: false, color: color.lighter }}
+		>
+			{children}
+		</Pressable>
 	);
 };
 const styles = StyleSheet.create({
@@ -39,7 +44,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		marginVertical: 10,
 		padding: 10,
-		elevation: 10,
+		// elevation: 10,
 	},
 	text: {
 		color: color.lighter,

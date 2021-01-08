@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 
 import Tabs from './app/screens/Tabs';
@@ -13,7 +13,7 @@ import SelectGroup from './app/screens/SelectGroup';
 import { AppLoading } from 'expo';
 import { groupInfo, Subject } from './app/types';
 import { loadStateFromStorage } from './app/utils/ManageAsyncStorage';
-import { keys } from './app/config/vars';
+import { keys, MyTheme } from './app/config/vars';
 import color from './app/config/color';
 import TestScreen from './app/screens/TestScreen';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -42,6 +42,7 @@ export default function App() {
 			groupValue.setGroup(groupData);
 		}
 	};
+
 	if (!isReady) {
 		return (
 			<AppLoading startAsync={loadAppState} onFinish={() => setIsReady(true)} />
@@ -61,9 +62,13 @@ export default function App() {
 							{subjectsValue.state.loading ? (
 								<Loading onLoaded={() => console.log('loaded')} />
 							) : (
-								<NavigationContainer>
-									<Stack.Navigator headerMode='none'>
-										<Stack.Screen name='Home' component={Tabs} />
+								<NavigationContainer theme={MyTheme}>
+									<Stack.Navigator headerMode='screen'>
+										<Stack.Screen
+											name='Home'
+											component={Tabs}
+											options={{ headerShown: false }}
+										/>
 										<Stack.Screen name='Settings' component={settingsScreen} />
 									</Stack.Navigator>
 								</NavigationContainer>

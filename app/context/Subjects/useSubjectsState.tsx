@@ -6,7 +6,7 @@ import { keys } from '../../config/vars';
 
 export type SubjectsState = {
 	// [mon,tue,wed,thur,fri,sat,
-	// another 5 days for 2nd group specific subjects]
+	// & another 5 days for 2nd group specific subjects]
 	subjects: Subject[][] | null;
 	loading: boolean;
 };

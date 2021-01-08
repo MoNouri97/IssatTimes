@@ -16,14 +16,17 @@ import { GroupContext } from '../context/Group/GroupContext';
 import { groupInfo } from '../types';
 import { groupList } from '../utils/groupList';
 import defaultStyles from '../config/defaultStyles';
+import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 
 const SelectGroup: React.FC = () => {
 	const [search, setSearch] = useState('');
 	const [subGroup, setSubGroup] = useState<1 | 2>(1);
 	const { setGroup } = useContext(GroupContext);
+	const { dispatch } = useContext(SubjectsContext);
 	const handleSelectGroup = (selection: { name: string; id: string }) => {
 		setSearch(selection.name);
 		setGroup!({ ...selection, subGroup });
+		dispatch!({ type: 'START_LOADING' });
 	};
 	const toggleSubGroup = () => {
 		setSubGroup(subGroup == 1 ? 2 : 1);
@@ -68,14 +71,15 @@ const SelectGroup: React.FC = () => {
 						.slice(0, 3)
 						.map(grp => {
 							return (
-								<TouchableOpacity
+								<Pressable
+									android_ripple={{ borderless: false }}
 									key={grp.id}
 									onPress={() => {
 										handleSelectGroup(grp);
 									}}
 								>
 									<AppText style={styles.listItem}> {grp.name}</AppText>
-								</TouchableOpacity>
+								</Pressable>
 							);
 						})}
 				</ScrollView>
@@ -109,17 +113,19 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	list: {
-		backgroundColor: color.lighter,
 		marginTop: 10,
 		borderRadius: 5,
 		maxHeight: '80%',
-		height: 220,
+		// height: 220,
 		// marginBottom: 100,
 	},
 	listItem: {
+		backgroundColor: color.lighter,
 		fontSize: 20,
 		padding: 20,
 		color: color.medium,
+		borderBottomWidth: 1,
+		borderBottomColor: color.bg,
 	},
 	subBtn: {
 		backgroundColor: color.lighter,

@@ -19,8 +19,6 @@ interface Props {
 }
 
 const TopBar: React.FC<Props> = ({ onConfigPress }) => {
-	const { group, setGroup } = useContext(GroupContext);
-	const { dispatch } = useContext(SubjectsContext);
 	return (
 		<View style={styles.container}>
 			<AppText style={styles.title}>ISSAT Times</AppText>
