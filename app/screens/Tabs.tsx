@@ -1,19 +1,18 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import ScheduleScreen from './ScheduleScreen';
 
 import React, { useContext, useEffect, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View, Animated } from 'react-native';
 import TopBar from '../components/TopBar';
-import { NavigationContainer } from '@react-navigation/native';
-import { keys, MyTheme } from '../config/vars';
+import { keys } from '../config/vars';
 import { fetchHtml } from '../utils/fetchIssat';
 import { getUpdateDate } from '../utils/getUpdateDate';
 import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
-import color from '../config/color';
-import AppTabBar from '../components/AppTabBar';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ParamList } from '../types';
+import ScheduleAlt from './ScheduleAlt';
+import TabHeader from '../components/AppTabBar/TabHeader';
+import AppText from '../components/AppText';
 
 const checkForUpdate = async () => {
 	const html = await fetchHtml(
@@ -28,7 +27,6 @@ const checkForUpdate = async () => {
 	return false;
 };
 
-const Tab = createMaterialTopTabNavigator();
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 interface props {
@@ -36,6 +34,7 @@ interface props {
 }
 const Tabs: React.FC<props> = ({ navigation }) => {
 	const subjectState = useContext(SubjectsContext);
+	const scrollX = React.useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
 		if (subjectState.state.loading) {
@@ -62,11 +61,32 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 		});
 	}, []);
 
+	useEffect(() => {
+		console.log({ scrollX });
+	}, []);
+
 	return (
 		<>
 			<TopBar onConfigPress={() => navigation.navigate('Settings')} />
 			<View style={styles.container}>
-				<NavigationContainer independent theme={MyTheme}>
+				<TabHeader labels={dayTabs} scrollX={scrollX} />
+				<Animated.FlatList
+					keyExtractor={(_, i) => i + ''}
+					horizontal
+					decelerationRate={0.9}
+					snapToAlignment='center'
+					snapToInterval={Dimensions.get('window').width}
+					data={dayTabs}
+					renderItem={day => <ScheduleAlt dayIndex={day.index} />}
+					onScroll={Animated.event(
+						[{ nativeEvent: { contentOffset: { x: scrollX } } }],
+						{
+							useNativeDriver: false,
+						},
+					)}
+					// scrollEventThrottle={16}
+				/>
+				{/* <NavigationContainer independent theme={MyTheme}>
 					<Tab.Navigator
 						style={{ backgroundColor: color.bg }}
 						// backBehavior='none'
@@ -82,8 +102,8 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 								initialParams={{ index: i }}
 							/>
 						))}
-					</Tab.Navigator>
-				</NavigationContainer>
+					</Tab.Navigator> 
+				</NavigationContainer>*/}
 			</View>
 		</>
 	);

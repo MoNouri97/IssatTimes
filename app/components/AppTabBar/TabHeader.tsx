@@ -1,60 +1,95 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+	Animated,
+	StyleSheet,
+	Text,
+	View,
+	Dimensions,
+	Pressable,
+} from 'react-native';
+import color from '../../config/color';
+import AppText from '../AppText';
 
+const { width } = Dimensions.get('window');
 interface Props {
-	route: any;
-	index: any;
-	label: string;
+	scrollX: Animated.Value;
+	labels: string[];
 }
 
-const TabHeader: React.FC<Props> = ({ route, index, label }) => {
-	const isFocused = state.index === index;
+const TabHeader: React.FC<Props> = ({ labels, scrollX }) => {
+	// const isFocused = state.index === index;
 
-	const onPress = () => {
-		const event = navigation.emit({
-			type: 'tabPress',
-			target: route.key,
-			canPreventDefault: true,
-		});
-
-		if (!isFocused && !event.defaultPrevented) {
-			navigation.navigate(route.name);
-		}
+	const onPress = (i: number) => {
+		console.log('press' + i);
 	};
-
-	const inputRange = state.routes.map((_, i) => i);
-	const opacity = Animated.interpolate(position, {
-		inputRange,
-		outputRange: inputRange.map(i => (i === index ? 1 : 0.5)),
-	});
-	const scale = Animated.interpolate(position, {
-		inputRange,
-		outputRange: inputRange.map(i => (i === index ? 1.2 : 0.8)),
-	});
 
 	return (
 		<View
-			// android_ripple={{ borderless: true }}
-			key={index}
-			// onPress={onPress}
-			style={{ flex: 1 }}
+			style={{
+				flexDirection: 'row',
+				marginVertical: 20,
+				width: '100%',
+				justifyContent: 'space-evenly',
+			}}
 		>
-			<Animated.Text
-				style={{
-					opacity,
-					backgroundColor: color.bg,
-					color: color.fg,
-					fontWeight: '100',
-					borderRadius: 10,
-					margin: 5,
-					padding: 5,
-					paddingVertical: 10,
-					textAlign: 'center',
-					// transform: [{ scale }],
-				}}
-			>
-				{label}
-			</Animated.Text>
+			{labels.map((lab, index) => {
+				const inputRange = [
+					(index - 1) * width,
+					index * width,
+					(index + 1) * width,
+				];
+				const inputRange2 = labels.map((_, i) => i * width);
+
+				const scale = scrollX.interpolate({
+					inputRange,
+					outputRange: [0.8, 1.2, 0.8],
+					extrapolate: 'clamp',
+				});
+
+				const bg = scrollX.interpolate({
+					inputRange,
+					outputRange: [color.bg, color.fg, color.bg],
+					extrapolate: 'clamp',
+				});
+				const fg = scrollX.interpolate({
+					inputRange,
+					outputRange: [color.fg, color.bg, color.fg],
+
+					extrapolate: 'clamp',
+				});
+				const animatedStyle = {
+					backgroundColor: bg,
+					color: fg,
+				};
+
+				return (
+					<Pressable
+						android_ripple={{ borderless: true }}
+						key={index}
+						onPress={() => onPress(index)}
+						// style={{ flex: 1 }}
+					>
+						<Animated.Text
+							style={[
+								{
+									backgroundColor: color.bg,
+									color: color.fg,
+									fontWeight: '100',
+									borderRadius: 10,
+									margin: 5,
+									padding: 5,
+									width: 40,
+									textAlign: 'center',
+									transform: [{ scale }],
+								},
+								animatedStyle,
+							]}
+						>
+							{lab}
+						</Animated.Text>
+					</Pressable>
+				);
+			})}
 		</View>
 	);
 };
