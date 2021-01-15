@@ -56,7 +56,7 @@ const SelectGroup: React.FC = () => {
 						/>
 					</View>
 					<Pressable
-						android_ripple={{ borderless: false, color: color.bg }}
+						android_ripple={{ borderless: true, color: color.bg }}
 						onPress={toggleSubGroup}
 						style={[styles.subBtn]}
 					>
@@ -72,13 +72,14 @@ const SelectGroup: React.FC = () => {
 						.map(grp => {
 							return (
 								<Pressable
-									android_ripple={{ borderless: false }}
+									android_ripple={{ borderless: false, color: color.bg }}
 									key={grp.id}
 									onPress={() => {
 										handleSelectGroup(grp);
 									}}
+									style={styles.listItem}
 								>
-									<AppText style={styles.listItem}> {grp.name}</AppText>
+									<AppText style={styles.listItemText}> {grp.name}</AppText>
 								</Pressable>
 							);
 						})}
@@ -121,11 +122,15 @@ const styles = StyleSheet.create({
 	},
 	listItem: {
 		backgroundColor: color.lighter,
-		fontSize: 20,
+
 		padding: 20,
-		color: color.medium,
+
 		borderBottomWidth: 1,
 		borderBottomColor: color.bg,
+	},
+	listItemText: {
+		fontSize: 20,
+		color: color.medium,
 	},
 	subBtn: {
 		backgroundColor: color.lighter,
