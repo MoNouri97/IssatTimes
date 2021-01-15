@@ -14,13 +14,15 @@ const { width } = Dimensions.get('window');
 interface Props {
 	scrollX: Animated.Value;
 	labels: string[];
+	onClick: (index: number) => void;
 }
 
-const TabHeader: React.FC<Props> = ({ labels, scrollX }) => {
+const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
 	// const isFocused = state.index === index;
 
 	const onPress = (i: number) => {
 		console.log('press' + i);
+		onClick(i);
 	};
 
 	return (
@@ -64,15 +66,13 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX }) => {
 
 				return (
 					<Pressable
-						android_ripple={{ borderless: true }}
+						android_ripple={{ borderless: true, color: color.lighter }}
 						key={index}
 						onPress={() => onPress(index)}
-						// style={{ flex: 1 }}
 					>
 						<Animated.Text
 							style={[
 								{
-									backgroundColor: color.bg,
 									color: color.fg,
 									fontWeight: '100',
 									borderRadius: 10,

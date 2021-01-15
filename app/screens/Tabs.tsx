@@ -1,6 +1,11 @@
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, {
+	RefObject,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+} from 'react';
 import { Dimensions, StyleSheet, View, Animated } from 'react-native';
 import TopBar from '../components/TopBar';
 import { keys } from '../config/vars';
@@ -13,6 +18,7 @@ import { ParamList } from '../types';
 import ScheduleAlt from './ScheduleAlt';
 import TabHeader from '../components/AppTabBar/TabHeader';
 import AppText from '../components/AppText';
+import { FlatList } from 'react-native-gesture-handler';
 
 const checkForUpdate = async () => {
 	const html = await fetchHtml(
@@ -27,14 +33,24 @@ const checkForUpdate = async () => {
 	return false;
 };
 
+const ITEM_WIDTH = Dimensions.get('window').width;
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+type refType = FlatList<string> | null;
 interface props {
 	navigation: StackNavigationProp<ParamList, 'Main'>;
 }
 const Tabs: React.FC<props> = ({ navigation }) => {
 	const subjectState = useContext(SubjectsContext);
-	const scrollX = React.useRef(new Animated.Value(0)).current;
+	const scrollX = useRef(new Animated.Value(0)).current;
+	const flatListRef = useRef<refType>(null);
+
+	const scrollTo = useCallback(
+		(index: number) => {
+			flatListRef.current?.scrollToIndex({ index, animated: true });
+		},
+		[flatListRef.current?.scrollToIndex],
+	);
 
 	useEffect(() => {
 		if (subjectState.state.loading) {
@@ -61,21 +77,23 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 		});
 	}, []);
 
-	useEffect(() => {
-		console.log({ scrollX });
-	}, []);
-
 	return (
 		<>
 			<TopBar onConfigPress={() => navigation.navigate('Settings')} />
 			<View style={styles.container}>
-				<TabHeader labels={dayTabs} scrollX={scrollX} />
-				<Animated.FlatList
+				<TabHeader labels={dayTabs} scrollX={scrollX} onClick={scrollTo} />
+				<FlatList
+					ref={flatListRef}
 					keyExtractor={(_, i) => i + ''}
 					horizontal
+					getItemLayout={(_, index) => ({
+						length: ITEM_WIDTH,
+						offset: ITEM_WIDTH * index,
+						index,
+					})}
 					decelerationRate={0.9}
 					snapToAlignment='center'
-					snapToInterval={Dimensions.get('window').width}
+					snapToInterval={ITEM_WIDTH}
 					data={dayTabs}
 					renderItem={day => <ScheduleAlt dayIndex={day.index} />}
 					onScroll={Animated.event(

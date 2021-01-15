@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
 	},
 	listContainer: {
 		padding: 20,
+		paddingTop: 0,
 	},
 	title: {
 		fontSize: 50,
