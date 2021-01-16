@@ -5,6 +5,7 @@ import WebScrap from './WebScrap';
 import { loadingStates } from '../types';
 import color from '../config/color';
 import LottieView from 'lottie-react-native';
+import defaultStyles from '../config/defaultStyles';
 
 type Props = { onLoaded: () => void };
 const Loading: React.FC<Props> = ({ onLoaded }) => {
@@ -20,7 +21,7 @@ const Loading: React.FC<Props> = ({ onLoaded }) => {
 			<View style={styles.loadingAnim}>
 				<LottieView autoPlay loop source={require('../assets/loading.json')} />
 			</View>
-			<AppText style={styles.title}>{state}</AppText>
+			<AppText style={defaultStyles.title}>{state}</AppText>
 			<WebScrap loadingState={state} setLoadingState={setState} />
 		</View>
 	);
@@ -37,10 +38,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 40,
 		width: '100%',
 	},
-	title: {
-		fontWeight: 'bold',
-		fontSize: 50,
-	},
+
 	loadingAnim: {
 		width: '100%',
 		height: 300,

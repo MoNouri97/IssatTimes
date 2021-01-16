@@ -1,6 +1,8 @@
 import React from 'react';
 import { Platform, StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
+import { useFonts, Lato_400Regular } from '@expo-google-fonts/lato';
 import color from '../config/color';
+import { AppLoading } from 'expo';
 
 interface Props {
 	style?: StyleProp<TextStyle> | undefined;
@@ -15,11 +17,13 @@ const styles = StyleSheet.create({
 		...Platform.select({
 			android: {
 				fontSize: 18,
-				fontFamily: 'Roboto',
+				fontFamily: 'Lato_400Regular',
+				// fontFamily: 'Roboto',
 			},
 			ios: {
 				fontSize: 20,
-				fontFamily: 'Avenir',
+				fontFamily: 'Lato_400Regular',
+				// fontFamily: 'Avenir',
 			},
 		}),
 	},

@@ -1,5 +1,5 @@
 import { DefaultTheme } from '@react-navigation/native';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AppBtn from '../components/AppBtn';
 import AppScreen from '../components/AppScreen';
@@ -13,15 +13,20 @@ interface Props {}
 const settingsScreen: React.FC<Props> = ({}) => {
 	const { group, setGroup } = useContext(GroupContext);
 	const { dispatch } = useContext(SubjectsContext);
+	const [subGroup, setSubGroup] = useState(group?.subGroup!);
 
 	// const [subGroup, setSubGroup] = useState<1 | 2>(() => group?.subGroup || 1);
 
 	const toggleSubGroup = () => {
-		setGroup!({ ...group!, subGroup: group?.subGroup == 1 ? 2 : 1 });
+		setSubGroup(subGroup == 1 ? 2 : 1);
 	};
 	const handleChangeGroup = () => {
 		setGroup!({ id: '', name: '', subGroup: 1 });
 	};
+	useEffect(() => {
+		console.log(subGroup);
+		setGroup!({ ...group!, subGroup });
+	}, [subGroup]);
 
 	return (
 		<AppScreen style={styles.container}>
@@ -29,7 +34,7 @@ const settingsScreen: React.FC<Props> = ({}) => {
 			<View style={styles.row}>
 				<AppText>Sub-Group</AppText>
 				<AppBtn onPress={toggleSubGroup} style={styles.subBtn}>
-					<AppText>{group?.subGroup}</AppText>
+					<AppText>{subGroup}</AppText>
 				</AppBtn>
 			</View>
 			<View style={styles.row}>

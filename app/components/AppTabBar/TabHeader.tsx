@@ -8,6 +8,8 @@ import {
 	Pressable,
 } from 'react-native';
 import color from '../../config/color';
+
+import { AppLoading } from 'expo';
 import AppText from '../AppText';
 
 const { width } = Dimensions.get('window');
@@ -28,13 +30,15 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
 	return (
 		<View
 			style={{
+				backgroundColor: color.bg,
 				flexDirection: 'row',
-				marginVertical: 20,
+				paddingBottom: 10,
 				width: '100%',
 				justifyContent: 'space-evenly',
 			}}
 		>
-			{labels.map((lab, index) => {
+			{labels.map((dayLabel, index) => {
+				const textLabel = dayLabel.split('\n');
 				const inputRange = [
 					(index - 1) * width,
 					index * width,
@@ -44,7 +48,7 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
 
 				const scale = scrollX.interpolate({
 					inputRange,
-					outputRange: [0.8, 1.2, 0.8],
+					outputRange: [0.8, 1, 0.8],
 					extrapolate: 'clamp',
 				});
 
@@ -61,33 +65,58 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
 				});
 				const animatedStyle = {
 					backgroundColor: bg,
+				};
+				const animatedText = {
 					color: fg,
 				};
 
 				return (
-					<Pressable
-						android_ripple={{ borderless: true, color: color.lighter }}
+					<Animated.View
 						key={index}
-						onPress={() => onPress(index)}
+						style={[
+							{
+								borderRadius: 17,
+								margin: 5,
+								padding: 5,
+								minWidth: '13%',
+								transform: [{ scale }],
+							},
+							animatedStyle,
+						]}
 					>
-						<Animated.Text
-							style={[
-								{
-									color: color.fg,
-									fontWeight: '100',
-									borderRadius: 10,
-									margin: 5,
-									padding: 5,
-									width: 40,
-									textAlign: 'center',
-									transform: [{ scale }],
-								},
-								animatedStyle,
-							]}
+						<Pressable
+							android_ripple={{ borderless: true, color: color.lighter }}
+							onPress={() => onPress(index)}
 						>
-							{lab}
-						</Animated.Text>
-					</Pressable>
+							<Animated.Text
+								style={[
+									{
+										color: color.fg,
+										fontFamily: 'Lato_300Light',
+										padding: 5,
+										textAlign: 'center',
+									},
+									animatedText,
+								]}
+							>
+								{textLabel[0]}
+							</Animated.Text>
+							<Animated.Text
+								style={[
+									{
+										color: color.fg,
+										fontFamily: 'Lato_900Black',
+										fontSize: 20,
+										margin: 0,
+										textAlign: 'center',
+									},
+									animatedText,
+								]}
+							>
+								{textLabel[1]}
+							</Animated.Text>
+						</Pressable>
+					</Animated.View>
 				);
 			})}
 		</View>

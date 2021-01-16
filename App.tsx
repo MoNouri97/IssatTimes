@@ -1,6 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
+import {
+	useFonts,
+	Lato_400Regular,
+	Lato_300Light,
+	Lato_900Black,
+} from '@expo-google-fonts/lato';
 
 import Tabs from './app/screens/Tabs';
 import { SubjectsContext } from './app/context/Subjects/SubjectsContext';
@@ -26,7 +32,11 @@ export default function App() {
 
 	const subjectsValue = useSubjectsState();
 	const groupValue = useGroupState();
-
+	let [fontsLoaded] = useFonts({
+		Lato_300Light,
+		Lato_400Regular,
+		Lato_900Black,
+	});
 	const loadAppState = async () => {
 		const [subjectsData, groupData] = await Promise.all([
 			loadStateFromStorage<Subject[][]>(keys.SUBJECTS),
@@ -43,7 +53,7 @@ export default function App() {
 		}
 	};
 
-	if (!isReady) {
+	if (!isReady || !fontsLoaded) {
 		return (
 			<AppLoading startAsync={loadAppState} onFinish={() => setIsReady(true)} />
 		);

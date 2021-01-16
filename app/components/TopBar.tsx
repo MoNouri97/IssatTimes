@@ -21,7 +21,7 @@ interface Props {
 const TopBar: React.FC<Props> = ({ onConfigPress }) => {
 	return (
 		<View style={styles.container}>
-			<AppText style={styles.title}>ISSAT Times</AppText>
+			<AppText style={defaultStyles.AppLogo}>ISSAT Times</AppText>
 			<Pressable
 				android_ripple={{ borderless: true }}
 				style={styles.groupName}

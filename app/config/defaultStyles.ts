@@ -10,18 +10,18 @@ export default {
 		shadowRadius: 10,
 	},
 	AppLogo: {
-		fontSize: 20,
+		fontSize: 30,
 		color: color.primary,
-		fontWeight: 'bold',
 		textTransform: 'uppercase',
-		width: '50%',
+		// width: '50%',
 		textAlign: 'left',
 		alignSelf: 'flex-start',
 		padding: 10,
+		fontFamily: 'Lato_900Black',
 	} as any,
 	title: {
 		fontSize: 50,
 		color: color.fg,
-		fontWeight: 'bold',
+		fontFamily: 'Lato_900Black',
 	} as any,
 };

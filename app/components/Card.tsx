@@ -61,7 +61,7 @@ const AppCard: React.FC<Subject> = ({
 				<View style={styles.time}>
 					<AppText>{time}</AppText>
 					<AppText style={styles.timeClock}>
-						{`${timesArr[time]?.from}\n\n${timesArr[time]?.to}`}
+						{`${timesArr[time]?.from}\n|\n${timesArr[time]?.to}`}
 					</AppText>
 				</View>
 			</View>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
 	mainContent: {
 		backgroundColor: color.lighter,
 		// backgroundColor: color.light,
-		borderRadius: 20,
+		borderRadius: 27,
 		flex: 1,
 		overflow: 'hidden',
 		marginBottom: 10,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	subtitleText: {
-		fontWeight: '100',
+		fontFamily: 'Lato_300Light',
 		color: color.medium,
 		marginHorizontal: 10,
 		fontSize: 13,
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 10,
 		color: color.fg,
 		fontSize: 15,
+		fontFamily: 'Lato_300Light',
 	},
 	time: {
 		flexDirection: 'row',
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 		textTransform: 'uppercase',
 		color: color.fg,
-		fontWeight: 'bold',
+		fontFamily: 'Lato_900Black',
 		flexShrink: 1,
 		maxWidth: '50%',
 	},
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
 		right: 0,
 		fontSize: 50,
 		zIndex: -1,
-		fontWeight: 'bold',
+		fontFamily: 'Lato_900Black',
 		color: color.bg,
 	},
 

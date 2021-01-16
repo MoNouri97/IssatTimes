@@ -91,7 +91,7 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 						offset: ITEM_WIDTH * index,
 						index,
 					})}
-					decelerationRate={0.9}
+					decelerationRate={'normal'}
 					snapToAlignment='center'
 					snapToInterval={ITEM_WIDTH}
 					data={dayTabs}
@@ -102,26 +102,9 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 							useNativeDriver: false,
 						},
 					)}
-					// scrollEventThrottle={16}
+					scrollEventThrottle={16}
+					disableIntervalMomentum
 				/>
-				{/* <NavigationContainer independent theme={MyTheme}>
-					<Tab.Navigator
-						style={{ backgroundColor: color.bg }}
-						// backBehavior='none'
-						lazy
-						lazyPreloadDistance={3}
-						// tabBar={props => <AppTabBar {...props} />}
-					>
-						{dayTabs.map((day, i) => (
-							<Tab.Screen
-								key={day}
-								name={day}
-								component={ScheduleScreen}
-								initialParams={{ index: i }}
-							/>
-						))}
-					</Tab.Navigator> 
-				</NavigationContainer>*/}
 			</View>
 		</>
 	);
