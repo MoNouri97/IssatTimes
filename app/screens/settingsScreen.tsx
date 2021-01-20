@@ -24,7 +24,6 @@ const settingsScreen: React.FC<Props> = ({}) => {
 		setGroup!({ id: '', name: '', subGroup: 1 });
 	};
 	useEffect(() => {
-		console.log(subGroup);
 		setGroup!({ ...group!, subGroup });
 	}, [subGroup]);
 

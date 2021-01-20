@@ -15,6 +15,8 @@ import AppScreen from './app/components/AppScreen';
 import Loading from './app/components/Loading';
 import { useGroupState } from './app/context/Group/useGroupState';
 import { GroupContext } from './app/context/Group/GroupContext';
+import { useTodosState } from './app/context/Todos/useTodosState';
+import { TodosContext, TodosProvider } from './app/context/Todos/TodosContext';
 import SelectGroup from './app/screens/SelectGroup';
 import { AppLoading } from 'expo';
 import { groupInfo, Subject } from './app/types';
@@ -32,6 +34,7 @@ export default function App() {
 
 	const subjectsValue = useSubjectsState();
 	const groupValue = useGroupState();
+
 	let [fontsLoaded] = useFonts({
 		Lato_300Light,
 		Lato_400Regular,
@@ -62,29 +65,34 @@ export default function App() {
 	// return <TestScreen />;
 	return (
 		<AppScreen style={styles.container}>
+			<StatusBar backgroundColor={color.bg} barStyle='light-content' />
 			<GroupContext.Provider value={groupValue}>
-				<StatusBar backgroundColor={color.bg} barStyle='light-content' />
 				<SubjectsContext.Provider value={subjectsValue}>
-					{!groupValue.group.id ? (
-						<SelectGroup />
-					) : (
-						<View style={styles.container}>
-							{subjectsValue.state.loading ? (
-								<Loading onLoaded={() => console.log('loaded')} />
-							) : (
-								<NavigationContainer theme={MyTheme}>
-									<Stack.Navigator headerMode='screen'>
-										<Stack.Screen
-											name='Home'
-											component={Tabs}
-											options={{ headerShown: false }}
-										/>
-										<Stack.Screen name='Settings' component={settingsScreen} />
-									</Stack.Navigator>
-								</NavigationContainer>
-							)}
-						</View>
-					)}
+					<TodosProvider>
+						{!groupValue.group.id ? (
+							<SelectGroup />
+						) : (
+							<View style={styles.container}>
+								{subjectsValue.state.loading ? (
+									<Loading onLoaded={() => console.log('loaded')} />
+								) : (
+									<NavigationContainer theme={MyTheme}>
+										<Stack.Navigator headerMode='screen'>
+											<Stack.Screen
+												name='Home'
+												component={Tabs}
+												options={{ headerShown: false }}
+											/>
+											<Stack.Screen
+												name='Settings'
+												component={settingsScreen}
+											/>
+										</Stack.Navigator>
+									</NavigationContainer>
+								)}
+							</View>
+						)}
+					</TodosProvider>
 				</SubjectsContext.Provider>
 			</GroupContext.Provider>
 		</AppScreen>

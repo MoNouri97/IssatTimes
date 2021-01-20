@@ -23,3 +23,11 @@ export type loadingStates =
 	| 'Choosing Group ...'
 	| 'Collecting Data ...'
 	| 'Done';
+
+export type Todo = {
+	id: string;
+	name: string;
+	done: boolean;
+	day: string;
+	subject: string;
+};

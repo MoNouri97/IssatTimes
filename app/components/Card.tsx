@@ -1,5 +1,11 @@
-import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import React, { useCallback, useRef } from 'react';
+import {
+	Animated,
+	Pressable,
+	SafeAreaView,
+	StyleSheet,
+	View,
+} from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import color from '../config/color';
 import { Subject } from '../types';
@@ -37,54 +43,80 @@ const timesArr = {
 		to: '15.00',
 	},
 };
-const AppCard: React.FC<Subject> = ({
+
+type Props = Subject & { onPress: (s: string) => void };
+const AppCard: React.FC<Props> = ({
 	name,
 	teacher,
 	type,
 	location,
 	regime,
 	time,
+	onPress,
 }) => {
+	const scale = useRef(new Animated.Value(1)).current;
+	const handlePress = () => {
+		Animated.timing(scale, {
+			toValue: 0.9,
+			useNativeDriver: true,
+			duration: 100,
+		}).start(() => {
+			Animated.timing(scale, {
+				toValue: 1,
+				useNativeDriver: true,
+				duration: 50,
+				// }).start();
+			}).start(() => onPress(time));
+		});
+	};
 	return (
-		<View style={styles.mainContent}>
-			<View
-				style={[
-					styles.tag,
-					{ backgroundColor: type === 'C' ? color.primary : color.secondary },
-				]}
-			>
-				<Feather name='user' size={20} color={color.lighter} />
-				<AppText style={styles.tagText}>{teacher}</AppText>
-			</View>
-			<View style={[styles.titleContainer]}>
-				<AppText style={styles.title}>{name}</AppText>
-				<View style={styles.time}>
-					<AppText>{time}</AppText>
-					<AppText style={styles.timeClock}>
-						{`${timesArr[time]?.from}\n|\n${timesArr[time]?.to}`}
-					</AppText>
+		<Pressable
+			// style={{ flex: 1 }}
+			collapsable
+			// onLongPress={handlePress}
+			onPress={handlePress}
+			// android_ripple={{ borderless: false, color: color.fg }}
+		>
+			<Animated.View style={[styles.mainContent, { transform: [{ scale }] }]}>
+				<View
+					style={[
+						styles.tag,
+						{ backgroundColor: type === 'C' ? color.primary : color.secondary },
+					]}
+				>
+					<Feather name='user' size={20} color={color.lighter} />
+					<AppText style={styles.tagText}>{teacher}</AppText>
 				</View>
-			</View>
-			<AppText style={styles.type}>{type}</AppText>
-			<View style={styles.subTitleContainer}>
-				<View style={styles.subTitle}>
-					<MaterialCommunityIcons
-						name='clock-outline'
-						color={color.medium}
-						size={20}
-					/>
-					<AppText style={styles.subtitleText}>{regime} </AppText>
+				<View style={[styles.titleContainer]}>
+					<AppText style={styles.title}>{name}</AppText>
+					<View style={styles.time}>
+						<AppText>{time}</AppText>
+						<AppText style={styles.timeClock}>
+							{`${timesArr[time]?.from}\n|\n${timesArr[time]?.to}`}
+						</AppText>
+					</View>
 				</View>
-				<View style={styles.subTitle}>
-					<MaterialCommunityIcons
-						name='map-marker-outline'
-						color={color.medium}
-						size={20}
-					/>
-					<AppText style={styles.subtitleText}>{location} </AppText>
+				<AppText style={styles.type}>{type}</AppText>
+				<View style={styles.subTitleContainer}>
+					<View style={styles.subTitle}>
+						<MaterialCommunityIcons
+							name='clock-outline'
+							color={color.medium}
+							size={20}
+						/>
+						<AppText style={styles.subtitleText}>{regime} </AppText>
+					</View>
+					<View style={styles.subTitle}>
+						<MaterialCommunityIcons
+							name='map-marker-outline'
+							color={color.medium}
+							size={20}
+						/>
+						<AppText style={styles.subtitleText}>{location} </AppText>
+					</View>
 				</View>
-			</View>
-		</View>
+			</Animated.View>
+		</Pressable>
 	);
 };
 const styles = StyleSheet.create({
@@ -125,7 +157,6 @@ const styles = StyleSheet.create({
 	},
 	tag: {
 		flexDirection: 'row',
-		backgroundColor: color.primary,
 		borderRadius: 20,
 		paddingVertical: 10,
 		paddingHorizontal: 20,

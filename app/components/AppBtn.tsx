@@ -31,9 +31,9 @@ const AppBtn: React.FC<Props> = ({
 		<Pressable
 			style={[btnStyle, style]}
 			onPress={onPress}
-			android_ripple={{ borderless: false, color: color.lighter }}
+			android_ripple={{ borderless: false, color: color.fg }}
 		>
-			{children}
+			<AppText>{children}</AppText>
 		</Pressable>
 	);
 };

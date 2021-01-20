@@ -19,6 +19,7 @@ import ScheduleAlt from './ScheduleAlt';
 import TabHeader from '../components/AppTabBar/TabHeader';
 import AppText from '../components/AppText';
 import { FlatList } from 'react-native-gesture-handler';
+import ModalScreen from './ModalScreen';
 
 const checkForUpdate = async () => {
 	const html = await fetchHtml(
@@ -46,8 +47,8 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 	const flatListRef = useRef<refType>(null);
 
 	const scrollTo = useCallback(
-		(index: number) => {
-			flatListRef.current?.scrollToIndex({ index, animated: true });
+		(index: number, animated: boolean = true) => {
+			flatListRef.current?.scrollToIndex({ index, animated });
 		},
 		[flatListRef.current?.scrollToIndex],
 	);
@@ -56,6 +57,8 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 		if (subjectState.state.loading) {
 			return;
 		}
+		scrollTo(new Date().getDay() - 1, false);
+
 		checkForUpdate().then(shouldUpdate => {
 			if (shouldUpdate) {
 				alert('should update ...');
@@ -72,7 +75,7 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 		const todayDate = d.getDate();
 
 		return days.map((day, i) => {
-			const date = todayDate + (i + 1 - today);
+			const date = todayDate + (i - today);
 			return `${day}\n${date}`;
 		});
 	}, []);

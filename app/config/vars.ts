@@ -4,6 +4,7 @@ export const keys = {
 	LAST_UPDATE: 'lastUpdate',
 	SUBJECTS: 'subjects',
 	GROUP: 'group',
+	TODOS: 'todos',
 };
 export const MyTheme = {
 	dark: true,

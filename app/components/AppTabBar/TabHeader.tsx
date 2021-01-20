@@ -2,15 +2,11 @@ import React from 'react';
 import {
 	Animated,
 	StyleSheet,
-	Text,
 	View,
 	Dimensions,
 	Pressable,
 } from 'react-native';
 import color from '../../config/color';
-
-import { AppLoading } from 'expo';
-import AppText from '../AppText';
 
 const { width } = Dimensions.get('window');
 interface Props {
@@ -23,7 +19,6 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
 	// const isFocused = state.index === index;
 
 	const onPress = (i: number) => {
-		console.log('press' + i);
 		onClick(i);
 	};
 
@@ -44,7 +39,6 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
 					index * width,
 					(index + 1) * width,
 				];
-				const inputRange2 = labels.map((_, i) => i * width);
 
 				const scale = scrollX.interpolate({
 					inputRange,
@@ -122,5 +116,4 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
 		</View>
 	);
 };
-const styles = StyleSheet.create({});
 export default TabHeader;

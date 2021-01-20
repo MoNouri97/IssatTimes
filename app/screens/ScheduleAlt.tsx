@@ -1,12 +1,19 @@
-import React, { useContext, useMemo } from 'react';
-import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import {
+	Dimensions,
+	FlatList,
+	Modal,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native';
 import Card from '../components/Card';
-import { ParamList } from '../types';
-import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 import AppBtn from '../components/AppBtn';
 import color from '../config/color';
 import { GroupContext } from '../context/Group/GroupContext';
+import ModalScreen from './ModalScreen';
+import AppText from '../components/AppText';
 
 const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
 
@@ -14,6 +21,8 @@ const ScheduleAlt: React.FC<{ dayIndex: number }> = ({ dayIndex }) => {
 	// context
 	const { state } = useContext(SubjectsContext);
 	const { group } = useContext(GroupContext);
+	const [showModal, setShowModal] = useState(false);
+	const [selected, setSelected] = useState('');
 
 	const groupData = useMemo(() => {
 		if (!state.subjects) return [];
@@ -43,15 +52,25 @@ const ScheduleAlt: React.FC<{ dayIndex: number }> = ({ dayIndex }) => {
 		return day;
 	}, [state.subjects, group]);
 
+	const handleSelect = (selected: string) => {
+		setSelected(selected);
+		setShowModal(true);
+	};
+
 	return (
 		<View style={styles.container}>
+			<ModalScreen
+				info={{ day: dayIndex, subject: selected }}
+				visible={showModal}
+				onRequestClose={() => setShowModal(false)}
+			/>
 			<FlatList
 				ListEmptyComponent={LoadingIndicator}
 				style={styles.list}
 				data={groupData}
 				keyExtractor={(item, index) => `${index}-${item.name}`}
 				contentContainerStyle={styles.listContainer}
-				renderItem={item => <Card {...item.item} />}
+				renderItem={item => <Card {...item.item} onPress={handleSelect} />}
 			/>
 		</View>
 	);
