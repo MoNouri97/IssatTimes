@@ -64,7 +64,6 @@ export const scrapData = (html: string) => {
 	} catch (error) {
 		console.log(error.message);
 	}
-	// console.log(week);
 
 	return week;
 };

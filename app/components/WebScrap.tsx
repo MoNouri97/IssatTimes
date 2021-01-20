@@ -43,7 +43,6 @@ const WebScrap: React.FC<Props> = ({ loadingState, setLoadingState }) => {
 				: 'Collecting Data ...',
 		);
 		webViewRef.current?.injectJavaScript(injectedJs);
-		console.log(`injected : group id'${group!.id}'`);
 	};
 
 	const handleOnMessage = (event: WebViewMessageEvent) => {
@@ -55,7 +54,6 @@ const WebScrap: React.FC<Props> = ({ loadingState, setLoadingState }) => {
 			setLoadingState('Done');
 			dispatch({ type: 'UPDATE', payload: week });
 			const updateDate = getUpdateDate(html);
-			console.log({ updateDate });
 			saveStateToStorage(updateDate, keys.LAST_UPDATE);
 		} else {
 			console.log('error : dispatch is undefined');
