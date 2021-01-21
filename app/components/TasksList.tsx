@@ -10,15 +10,12 @@ import AppText from './AppText';
 
 interface Props {
 	todos: Todo[];
-	title: string;
 	onDelete: (id: string) => void;
 }
 
-const TasksList: React.FC<Props> = ({ todos, title, onDelete }) => {
+const TasksList: React.FC<Props> = ({ todos, onDelete }) => {
 	return (
 		<>
-			<AppText style={styles.title}>{title}</AppText>
-
 			<View
 				style={{
 					flexDirection: 'column-reverse',
@@ -33,7 +30,7 @@ const TasksList: React.FC<Props> = ({ todos, title, onDelete }) => {
 							<AppText>| {todo.day}</AppText>
 							<AppText>-{todo.subject}</AppText>
 							<AppBtn style={styles.btn} onPress={() => onDelete(todo.id)}>
-								<Feather name='trash' size={15} color={color.fg} />
+								<Feather name='check' size={20} color={color.fg} />
 							</AppBtn>
 						</View>
 					))
@@ -53,18 +50,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	btn: {
-		backgroundColor: color.lighter,
+		backgroundColor: color.black,
 		padding: 15,
-		borderLeftWidth: 4,
-		borderColor: color.bg,
 		borderRadius: 0,
 		marginLeft: 5,
-	},
-	title: {
-		fontSize: 20,
-		fontFamily: 'Lato_900Black',
-
-		marginTop: 10,
 	},
 });
 export default TasksList;

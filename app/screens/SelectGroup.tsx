@@ -4,7 +4,6 @@ import {
 	ScrollView,
 	StyleSheet,
 	TextInput,
-	TouchableOpacity,
 	View,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -13,12 +12,9 @@ import AppText from '../components/AppText';
 import AppScreen from '../components/AppScreen';
 import color from '../config/color';
 import { GroupContext } from '../context/Group/GroupContext';
-import { groupInfo } from '../types';
 import { groupList } from '../utils/groupList';
 import defaultStyles from '../config/defaultStyles';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
-import { useBackButton } from '@react-navigation/native';
-import { useBackHandler } from '@react-native-community/hooks';
 
 const SelectGroup: React.FC = () => {
 	const [search, setSearch] = useState('');

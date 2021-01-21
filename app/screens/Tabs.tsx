@@ -5,6 +5,7 @@ import React, {
 	useEffect,
 	useMemo,
 	useRef,
+	useState,
 } from 'react';
 import { Dimensions, StyleSheet, View, Animated } from 'react-native';
 import TopBar from '../components/TopBar';
@@ -20,6 +21,7 @@ import TabHeader from '../components/AppTabBar/TabHeader';
 import AppText from '../components/AppText';
 import { FlatList } from 'react-native-gesture-handler';
 import ModalScreen from './ModalScreen';
+import TodosContext from '../context/Todos/TodosContext';
 
 const checkForUpdate = async () => {
 	const html = await fetchHtml(
@@ -46,6 +48,18 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 	const scrollX = useRef(new Animated.Value(0)).current;
 	const flatListRef = useRef<refType>(null);
 
+	const [todoDays, setTodoDays] = useState<string[]>([]);
+	const {
+		state: { todos },
+	} = useContext(TodosContext);
+	useEffect(() => {
+		let _days: string[] = [];
+		todos.forEach(todo =>
+			_days.includes(todo.day) ? null : (_days = [..._days, todo.day]),
+		);
+		setTodoDays(_days);
+	}, [todos]);
+
 	const scrollTo = useCallback(
 		(index: number, animated: boolean = true) => {
 			flatListRef.current?.scrollToIndex({ index, animated });
@@ -57,7 +71,6 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 		if (subjectState.state.loading) {
 			return;
 		}
-		scrollTo(new Date().getDay() - 1, false);
 
 		checkForUpdate().then(shouldUpdate => {
 			if (shouldUpdate) {
@@ -84,9 +97,15 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 		<>
 			<TopBar onConfigPress={() => navigation.navigate('Settings')} />
 			<View style={styles.container}>
-				<TabHeader labels={dayTabs} scrollX={scrollX} onClick={scrollTo} />
+				<TabHeader
+					todoDays={todoDays}
+					labels={dayTabs}
+					scrollX={scrollX}
+					onClick={scrollTo}
+				/>
 				<FlatList
 					ref={flatListRef}
+					initialScrollIndex={new Date().getDay() - 1}
 					keyExtractor={(_, i) => i + ''}
 					horizontal
 					getItemLayout={(_, index) => ({
@@ -98,7 +117,12 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 					snapToAlignment='center'
 					snapToInterval={ITEM_WIDTH}
 					data={dayTabs}
-					renderItem={day => <ScheduleAlt dayIndex={day.index} />}
+					renderItem={day => (
+						<ScheduleAlt
+							dayIndex={day.index}
+							haveTasks={todoDays.includes(days[day.index])}
+						/>
+					)}
 					onScroll={Animated.event(
 						[{ nativeEvent: { contentOffset: { x: scrollX } } }],
 						{

@@ -1,17 +1,11 @@
-import React, { useCallback, useRef } from 'react';
-import {
-	Animated,
-	Pressable,
-	SafeAreaView,
-	StyleSheet,
-	View,
-} from 'react-native';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import color from '../config/color';
 import { Subject } from '../types';
 import AppText from './AppText';
 import defaultStyles from '../config/defaultStyles';
-import { time } from 'faker';
+import TodosContext from '../context/Todos/TodosContext';
 
 const timesArr = {
 	S1: {
@@ -44,7 +38,7 @@ const timesArr = {
 	},
 };
 
-type Props = Subject & { onPress: (s: string) => void };
+type Props = Subject & { onPress: (s: string) => void; bubble?: boolean };
 const AppCard: React.FC<Props> = ({
 	name,
 	teacher,
@@ -53,13 +47,14 @@ const AppCard: React.FC<Props> = ({
 	regime,
 	time,
 	onPress,
+	bubble = false,
 }) => {
 	const scale = useRef(new Animated.Value(1)).current;
 	const handlePress = () => {
 		Animated.timing(scale, {
 			toValue: 0.9,
 			useNativeDriver: true,
-			duration: 100,
+			duration: 50,
 		}).start(() => {
 			Animated.timing(scale, {
 				toValue: 1,
@@ -97,6 +92,20 @@ const AppCard: React.FC<Props> = ({
 					</View>
 				</View>
 				<AppText style={styles.type}>{type}</AppText>
+				{bubble && (
+					<View
+						style={{
+							position: 'absolute',
+							width: 10,
+							height: 10,
+							top: 10,
+							right: 10,
+							borderRadius: 10,
+							backgroundColor: 'tomato',
+							...defaultStyles.shadow,
+						}}
+					></View>
+				)}
 				<View style={styles.subTitleContainer}>
 					<View style={styles.subTitle}>
 						<MaterialCommunityIcons
@@ -201,7 +210,6 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		right: 0,
 		fontSize: 50,
-		zIndex: -1,
 		fontFamily: 'Lato_900Black',
 		color: color.bg,
 	},
@@ -210,4 +218,4 @@ const styles = StyleSheet.create({
 		padding: 20,
 	},
 });
-export default AppCard;
+export default React.memo(AppCard);

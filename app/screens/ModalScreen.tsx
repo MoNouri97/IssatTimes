@@ -30,8 +30,8 @@ const ModalScreen: React.FC<Props> = ({ visible, onRequestClose, info }) => {
 			return;
 		}
 		Animated.timing(translateY, {
-			// toValue: 0,
-			toValue: SCREEN_H * 0.2,
+			toValue: 0,
+			// toValue: SCREEN_H * 0.2,
 			duration: 300,
 			useNativeDriver: true,
 		}).start();
@@ -91,9 +91,8 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		// bottom: 0,
 		height: SCREEN_H * 0.8,
-		top: 0,
-		borderTopEndRadius: 27,
-		borderTopLeftRadius: 27,
+		bottom: 0,
+		borderRadius: 27,
 		zIndex: 1,
 		width: '100%',
 		backgroundColor: color.bg,

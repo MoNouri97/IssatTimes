@@ -1,28 +1,28 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import {
-	Dimensions,
-	FlatList,
-	Modal,
-	StyleSheet,
-	Text,
-	View,
-} from 'react-native';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import Card from '../components/Card';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 import AppBtn from '../components/AppBtn';
 import color from '../config/color';
 import { GroupContext } from '../context/Group/GroupContext';
 import ModalScreen from './ModalScreen';
-import AppText from '../components/AppText';
+import TodosContext from '../context/Todos/TodosContext';
+import defaultStyles from '../config/defaultStyles';
 
 const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
 
-const ScheduleAlt: React.FC<{ dayIndex: number }> = ({ dayIndex }) => {
+const ScheduleAlt: React.FC<{ dayIndex: number; haveTasks: boolean }> = ({
+	dayIndex,
+	haveTasks,
+}) => {
 	// context
 	const { state } = useContext(SubjectsContext);
 	const { group } = useContext(GroupContext);
 	const [showModal, setShowModal] = useState(false);
 	const [selected, setSelected] = useState('');
+	const {
+		state: { todos },
+	} = useContext(TodosContext);
 
 	const groupData = useMemo(() => {
 		if (!state.subjects) return [];
@@ -52,10 +52,13 @@ const ScheduleAlt: React.FC<{ dayIndex: number }> = ({ dayIndex }) => {
 		return day;
 	}, [state.subjects, group]);
 
-	const handleSelect = (selected: string) => {
-		setSelected(selected);
-		setShowModal(true);
-	};
+	const handleSelect = useCallback(
+		(selected: string) => {
+			setSelected(selected);
+			setShowModal(true);
+		},
+		[setSelected, setShowModal],
+	);
 
 	return (
 		<View style={styles.container}>
@@ -72,14 +75,29 @@ const ScheduleAlt: React.FC<{ dayIndex: number }> = ({ dayIndex }) => {
 				contentContainerStyle={styles.listContainer}
 				renderItem={item => <Card {...item.item} onPress={handleSelect} />}
 			/>
+			{haveTasks && (
+				<AppBtn style={styles.tasksAlert} onPress={() => handleSelect('')}>
+					View Tasks
+				</AppBtn>
+			)}
 		</View>
 	);
 };
 const styles = StyleSheet.create({
+	tasksAlert: {
+		margin: 10,
+		position: 'absolute',
+		bottom: 0,
+		width: '50%',
+		backgroundColor: 'tomato',
+		borderRadius: 10,
+		...defaultStyles.shadow,
+	},
 	container: {
 		backgroundColor: color.bg,
 		width: Dimensions.get('window').width,
 		flex: 1,
+		alignItems: 'center',
 	},
 	list: {
 		width: '100%',

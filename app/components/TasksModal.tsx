@@ -21,6 +21,9 @@ const TasksModal: React.FC<Props> = ({ day, subject }) => {
 	const [newTodo, setNewTodo] = useState('');
 	const { state, dispatch } = useContext(TodosContext);
 	const handleAdd = () => {
+		if (newTodo.trim().length == 0) {
+			return;
+		}
 		dispatch!({
 			type: 'ADD',
 			payload: {
@@ -33,30 +36,36 @@ const TasksModal: React.FC<Props> = ({ day, subject }) => {
 				},
 			},
 		});
+		setNewTodo('');
 	};
 	const handleDelete = (id: string) => {
 		dispatch!({ type: 'DELETE', payload: { id } });
 	};
 	return (
 		<View>
-			<View style={styles.row}>
-				<FormInput
-					value={newTodo}
-					setValue={setNewTodo}
-					placeholder='Do Homework ...'
-				/>
-				<AppBtn style={styles.btn} onPress={handleAdd}>
-					<Feather name='send' size={20} color={color.fg} />
-				</AppBtn>
-			</View>
+			{subject !== '' && (
+				<>
+					<AppText style={styles.title}>{`${days[day]}-${subject}`}</AppText>
+					<View style={styles.row}>
+						<FormInput
+							value={newTodo}
+							setValue={setNewTodo}
+							placeholder='Do Homework ...'
+						/>
+						<AppBtn style={styles.btn} onPress={handleAdd}>
+							<Feather name='send' size={20} color={color.fg} />
+						</AppBtn>
+					</View>
+				</>
+			)}
+			<AppText style={styles.title}>Today</AppText>
 			<TasksList
-				title='Today'
 				todos={state.todos.filter(val => val.day == days[day])}
 				onDelete={handleDelete}
 			/>
+			<AppText style={styles.title}>All Tasks</AppText>
 			<TasksList
 				onDelete={handleDelete}
-				title='All Tasks'
 				todos={state.todos.filter(val => val.day != days[day])}
 			/>
 		</View>
@@ -69,10 +78,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderRadius: 5,
-		marginLeft: 10,
+		marginLeft: 5,
 		textAlign: 'center',
 		padding: 15,
-		marginVertical: 0,
+		flex: 1,
 	},
 	row: {
 		flexDirection: 'row',
@@ -80,6 +89,12 @@ const styles = StyleSheet.create({
 		alignItems: 'stretch',
 		justifyContent: 'space-between',
 		marginBottom: 10,
+	},
+	title: {
+		fontSize: 20,
+		fontFamily: 'Lato_900Black',
+
+		marginVertical: 10,
 	},
 });
 export default TasksModal;

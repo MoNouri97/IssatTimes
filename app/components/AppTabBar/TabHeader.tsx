@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
 	Animated,
 	StyleSheet,
@@ -7,17 +7,18 @@ import {
 	Pressable,
 } from 'react-native';
 import color from '../../config/color';
+import defaultStyles from '../../config/defaultStyles';
+import TodosContext from '../../context/Todos/TodosContext';
 
 const { width } = Dimensions.get('window');
 interface Props {
 	scrollX: Animated.Value;
 	labels: string[];
 	onClick: (index: number) => void;
+	todoDays: string[];
 }
 
-const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
-	// const isFocused = state.index === index;
-
+const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick, todoDays }) => {
 	const onPress = (i: number) => {
 		onClick(i);
 	};
@@ -78,6 +79,10 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
 							animatedStyle,
 						]}
 					>
+						{todoDays.includes(textLabel[0]) && (
+							<View style={styles.notifDot}></View>
+						)}
+
 						<Pressable
 							android_ripple={{ borderless: true, color: color.lighter }}
 							onPress={() => onPress(index)}
@@ -116,4 +121,17 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick }) => {
 		</View>
 	);
 };
-export default TabHeader;
+export default React.memo(TabHeader);
+
+const styles = StyleSheet.create({
+	notifDot: {
+		position: 'absolute',
+		width: 10,
+		height: 10,
+		top: 0,
+		right: 0,
+		borderRadius: 10,
+		backgroundColor: 'tomato',
+		...defaultStyles.shadow,
+	},
+});
