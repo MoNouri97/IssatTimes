@@ -5,7 +5,7 @@ import color from '../config/color';
 const AppText: React.FC<TextProps> = ({ children, style, ...props }) => {
 	return (
 		<Text {...props} style={[styles.text, style]}>
-			{children}{' '}
+			{children}
 		</Text>
 	);
 };

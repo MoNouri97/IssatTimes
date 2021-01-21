@@ -15,6 +15,10 @@ import { GroupContext } from '../context/Group/GroupContext';
 import { groupList } from '../utils/groupList';
 import defaultStyles from '../config/defaultStyles';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
+import { keys } from '../config/vars';
+import { groupInfo } from '../types';
+import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
+import { useBackHandler } from '@react-native-community/hooks';
 
 const SelectGroup: React.FC = () => {
 	const [search, setSearch] = useState('');
@@ -30,14 +34,19 @@ const SelectGroup: React.FC = () => {
 		setSubGroup(subGroup == 1 ? 2 : 1);
 	};
 
-	// useBackHandler(() => {
-	// 	if (shouldBeHandledHere) {
-	// 		// handle it
-	// 		return true
-	// 	}
-	// 	// let the default thing happen
-	// 	return false
-	// });
+	useBackHandler(() => {
+		if (true) {
+			loadStateFromStorage<groupInfo>(keys.GROUP).then(groupData => {
+				if (groupData) {
+					setGroup!(groupData);
+				}
+			});
+			// handle it
+			return true;
+		}
+		// let the default thing happen
+		return false;
+	});
 	return (
 		<AppScreen style={styles.bg}>
 			<View style={styles.container}>
@@ -66,7 +75,14 @@ const SelectGroup: React.FC = () => {
 						onPress={toggleSubGroup}
 						style={[styles.subBtn]}
 					>
-						<AppText>{subGroup}</AppText>
+						<AppText
+							style={{ textAlign: 'center', marginRight: 10 }}
+						>{`${subGroup}`}</AppText>
+						<Feather
+							name={`${subGroup == 1 ? 'toggle-left' : 'toggle-right'}`}
+							size={15}
+							color={subGroup == 1 ? color.fg : color.secondary}
+						/>
 					</Pressable>
 				</View>
 				<ScrollView style={styles.list}>
@@ -74,7 +90,7 @@ const SelectGroup: React.FC = () => {
 						.filter(grp =>
 							grp.name.toLowerCase().includes(search.toLowerCase()),
 						)
-						.slice(0, 3)
+						.slice(0, 6)
 						.map(grp => {
 							return (
 								<Pressable
@@ -106,7 +122,8 @@ const styles = StyleSheet.create({
 		color: color.fg,
 		fontSize: 20,
 		flex: 1,
-		padding: 20,
+		padding: 10,
+		paddingLeft: 20,
 	},
 	inputIcon: {
 		minWidth: 30,
@@ -122,7 +139,7 @@ const styles = StyleSheet.create({
 	list: {
 		marginTop: 10,
 		borderRadius: 5,
-		maxHeight: '80%',
+		maxHeight: '50%',
 		// height: 220,
 		// marginBottom: 100,
 	},
@@ -145,15 +162,13 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderRadius: 5,
-		width: 70,
 		marginLeft: 10,
-		textAlign: 'center',
-		padding: 20,
+		paddingHorizontal: 20,
 	},
 	row: {
 		flexDirection: 'row',
 		width: '100%',
-		alignItems: 'center',
+		alignItems: 'stretch',
 		justifyContent: 'space-between',
 		marginTop: 30,
 	},

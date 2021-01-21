@@ -24,8 +24,8 @@ const TasksList: React.FC<Props> = ({ todos, onDelete }) => {
 				{!todos.length ? (
 					<AppText style={{ padding: 10 }}>Nothing To Do ... </AppText>
 				) : (
-					todos.map((todo, i) => (
-						<View key={i} style={styles.todoItem}>
+					todos.map(todo => (
+						<View key={todo.id} style={styles.todoItem}>
 							<AppText numberOfLines={1} style={{ flex: 1 }}>
 								{todo.name}
 							</AppText>
