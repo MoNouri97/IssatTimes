@@ -1,19 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
 	Modal,
 	Pressable,
 	StyleSheet,
-	Text,
 	View,
-	TouchableHighlight,
-	TouchableWithoutFeedback,
 	Animated,
 	Dimensions,
-	Easing,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import AppBtn from '../components/AppBtn';
-import AppText from '../components/AppText';
 import TasksModal from '../components/TasksModal';
 import color from '../config/color';
 
@@ -45,32 +39,32 @@ const ModalScreen: React.FC<Props> = ({ visible, onRequestClose, info }) => {
 	};
 
 	return (
-		<>
-			<Modal
-				visible={visible}
-				transparent
-				onRequestClose={handleDismiss}
-				onDismiss={handleDismiss}
-				// animationType='fade'
-				statusBarTranslucent
-			>
-				<View style={styles.overlay}>
-					<View style={styles.container}>
-						<Pressable
-							style={styles.closeBtn}
-							onPress={handleDismiss}
-						></Pressable>
-						<Animated.View
-							style={[styles.modal, { transform: [{ translateY }] }]}
-						>
-							<ScrollView contentContainerStyle={{}}>
-								<TasksModal {...info} />
-							</ScrollView>
-						</Animated.View>
-					</View>
+		<Modal
+			visible={visible}
+			transparent
+			onRequestClose={handleDismiss}
+			onDismiss={handleDismiss}
+			collapsable
+			hardwareAccelerated
+			animationType='none'
+			statusBarTranslucent
+		>
+			<View style={styles.overlay}>
+				<View style={styles.container}>
+					<Pressable
+						style={styles.closeBtn}
+						onPress={handleDismiss}
+					></Pressable>
+					<Animated.View
+						style={[styles.modal, { transform: [{ translateY }] }]}
+					>
+						<ScrollView contentContainerStyle={{}}>
+							<TasksModal {...info} />
+						</ScrollView>
+					</Animated.View>
 				</View>
-			</Modal>
-		</>
+			</View>
+		</Modal>
 	);
 };
 const styles = StyleSheet.create({

@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import color from '../config/color';
 import { Subject } from '../types';
 import AppText from './AppText';
 import defaultStyles from '../config/defaultStyles';
-import TodosContext from '../context/Todos/TodosContext';
 
 const timesArr = {
 	S1: {
@@ -50,7 +49,7 @@ const AppCard: React.FC<Props> = ({
 	bubble = false,
 }) => {
 	const scale = useRef(new Animated.Value(1)).current;
-	const handlePress = () => {
+	const handlePress = useCallback(() => {
 		Animated.timing(scale, {
 			toValue: 0.9,
 			useNativeDriver: true,
@@ -63,7 +62,7 @@ const AppCard: React.FC<Props> = ({
 				// }).start();
 			}).start(() => onPress(time));
 		});
-	};
+	}, [onPress]);
 	return (
 		<Pressable
 			// style={{ flex: 1 }}

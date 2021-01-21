@@ -1,14 +1,13 @@
 import React from 'react';
-import { Platform, StyleProp, StyleSheet, Text, TextStyle } from 'react-native';
-import { useFonts, Lato_400Regular } from '@expo-google-fonts/lato';
+import { Platform, StyleSheet, Text, TextProps } from 'react-native';
 import color from '../config/color';
-import { AppLoading } from 'expo';
 
-interface Props {
-	style?: StyleProp<TextStyle> | undefined;
-}
-const AppText: React.FC<Props> = ({ children, style = {} }) => {
-	return <Text style={[styles.text, style]}>{children} </Text>;
+const AppText: React.FC<TextProps> = ({ children, style, ...props }) => {
+	return (
+		<Text {...props} style={[styles.text, style]}>
+			{children}{' '}
+		</Text>
+	);
 };
 
 const styles = StyleSheet.create({

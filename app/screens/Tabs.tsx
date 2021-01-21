@@ -1,5 +1,4 @@
 import React, {
-	RefObject,
 	useCallback,
 	useContext,
 	useEffect,
@@ -9,7 +8,7 @@ import React, {
 } from 'react';
 import { Dimensions, StyleSheet, View, Animated } from 'react-native';
 import TopBar from '../components/TopBar';
-import { keys } from '../config/vars';
+import { days, keys } from '../config/vars';
 import { fetchHtml } from '../utils/fetchIssat';
 import { getUpdateDate } from '../utils/getUpdateDate';
 import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
@@ -18,9 +17,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ParamList } from '../types';
 import ScheduleAlt from './ScheduleAlt';
 import TabHeader from '../components/AppTabBar/TabHeader';
-import AppText from '../components/AppText';
 import { FlatList } from 'react-native-gesture-handler';
-import ModalScreen from './ModalScreen';
 import TodosContext from '../context/Todos/TodosContext';
 
 const checkForUpdate = async () => {
@@ -37,7 +34,6 @@ const checkForUpdate = async () => {
 };
 
 const ITEM_WIDTH = Dimensions.get('window').width;
-const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 type refType = FlatList<string> | null;
 interface props {

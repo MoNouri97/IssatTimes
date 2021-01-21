@@ -26,7 +26,9 @@ const TasksList: React.FC<Props> = ({ todos, onDelete }) => {
 				) : (
 					todos.map((todo, i) => (
 						<View key={i} style={styles.todoItem}>
-							<AppText style={{ flex: 1 }}>{todo.name}</AppText>
+							<AppText numberOfLines={1} style={{ flex: 1 }}>
+								{todo.name}
+							</AppText>
 							<AppText>| {todo.day}</AppText>
 							<AppText>-{todo.subject}</AppText>
 							<AppBtn style={styles.btn} onPress={() => onDelete(todo.id)}>

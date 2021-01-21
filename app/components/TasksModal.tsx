@@ -1,34 +1,36 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import color from '../config/color';
-import defaultStyles from '../config/defaultStyles';
 import AppBtn from './AppBtn';
 import AppText from './AppText';
 import FormInput from './form/FormInput';
 import { TodosContext } from '../context/Todos/TodosContext';
 import TasksList from './TasksList';
-import { ScrollView } from 'react-native-gesture-handler';
+import { days } from '../config/vars';
 
 interface Props {
 	day: number;
 	subject: string;
 }
-const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const TasksModal: React.FC<Props> = ({ day, subject }) => {
 	const [newTodo, setNewTodo] = useState('');
-	const { state, dispatch } = useContext(TodosContext);
+	const {
+		state: { todos },
+		dispatch,
+	} = useContext(TodosContext);
 	const handleAdd = () => {
 		if (newTodo.trim().length == 0) {
 			return;
 		}
+		const newId = todos.length ? parseInt(todos[todos.length - 1].id) + 1 : 0;
 		dispatch!({
 			type: 'ADD',
 			payload: {
 				todo: {
-					id: state.todos.length + '',
+					id: `${newId}`,
 					day: days[day],
 					subject,
 					done: false,
@@ -60,13 +62,13 @@ const TasksModal: React.FC<Props> = ({ day, subject }) => {
 			)}
 			<AppText style={styles.title}>Today</AppText>
 			<TasksList
-				todos={state.todos.filter(val => val.day == days[day])}
+				todos={todos.filter(val => val.day == days[day])}
 				onDelete={handleDelete}
 			/>
 			<AppText style={styles.title}>All Tasks</AppText>
 			<TasksList
 				onDelete={handleDelete}
-				todos={state.todos.filter(val => val.day != days[day])}
+				todos={todos.filter(val => val.day != days[day])}
 			/>
 		</View>
 	);

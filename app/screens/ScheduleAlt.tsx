@@ -8,6 +8,7 @@ import { GroupContext } from '../context/Group/GroupContext';
 import ModalScreen from './ModalScreen';
 import TodosContext from '../context/Todos/TodosContext';
 import defaultStyles from '../config/defaultStyles';
+import { days } from '../config/vars';
 
 const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
 
@@ -52,12 +53,20 @@ const ScheduleAlt: React.FC<{ dayIndex: number; haveTasks: boolean }> = ({
 		return day;
 	}, [state.subjects, group]);
 
+	// const subjectWithTasks = useMemo(() => {
+	// 	return groupData.map(subject => {
+	// 		return todos.some(
+	// 			todo => todo.day === days[dayIndex] && todo.subject === subject.time,
+	// 		);
+	// 	});
+	// }, [groupData]);
 	const handleSelect = useCallback(
 		(selected: string) => {
 			setSelected(selected);
-			setShowModal(true);
+			setShowModal(!showModal);
+			console.log(showModal);
 		},
-		[setSelected, setShowModal],
+		[setSelected, setShowModal, showModal],
 	);
 
 	return (
@@ -73,7 +82,13 @@ const ScheduleAlt: React.FC<{ dayIndex: number; haveTasks: boolean }> = ({
 				data={groupData}
 				keyExtractor={(item, index) => `${index}-${item.name}`}
 				contentContainerStyle={styles.listContainer}
-				renderItem={item => <Card {...item.item} onPress={handleSelect} />}
+				renderItem={item => (
+					<Card
+						// bubble={haveTasks ? subjectWithTasks[item.index] : false}
+						{...item.item}
+						onPress={handleSelect}
+					/>
+				)}
 			/>
 			{haveTasks && (
 				<AppBtn style={styles.tasksAlert} onPress={() => handleSelect('')}>

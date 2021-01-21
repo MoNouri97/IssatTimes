@@ -17,3 +17,4 @@ export const MyTheme = {
 		notification: color.primary,
 	},
 };
+export const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
