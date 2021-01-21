@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
 		marginLeft: 5,
 		textAlign: 'center',
 		padding: 15,
-		flex: 1,
 	},
 	row: {
 		flexDirection: 'row',
