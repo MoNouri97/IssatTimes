@@ -1,15 +1,18 @@
 import { useEffect, useMemo, useReducer } from 'react';
 import faker from 'faker';
 import { Subject, Todo } from '../../types';
-import { saveStateToStorage } from '../../utils/ManageAsyncStorage';
+import {
+	loadStateFromStorage,
+	saveStateToStorage,
+} from '../../utils/ManageAsyncStorage';
 import { keys } from '../../config/vars';
 
 export type TodosState = {
 	todos: Todo[];
 	loading: boolean;
 };
-export type ActionType = 'ADD' | 'COMPLETE' | 'DELETE';
-export type PayloadType = { todo?: Todo; index?: number };
+export type ActionType = 'ADD' | 'COMPLETE' | 'DELETE' | 'LOAD';
+export type PayloadType = { all?: Todo[]; todo?: Todo; id?: string };
 
 export const initialState: TodosState = {
 	todos: [],
@@ -23,17 +26,19 @@ const reducer = (
 	switch (type) {
 		case 'ADD':
 			return { ...state, todos: [...state.todos, payload?.todo!] };
+		case 'LOAD':
+			return { ...state, todos: [...state.todos, ...payload?.all!] };
 		case 'COMPLETE':
 			return {
 				...state,
-				todos: state.todos.map((todo, idx) =>
-					idx !== payload?.index ? todo : { ...todo, done: true },
+				todos: state.todos.map(todo =>
+					todo.id !== payload?.id ? todo : { ...todo, done: true },
 				),
 			};
 		case 'DELETE':
 			return {
 				...state,
-				todos: state.todos.filter((_, idx) => idx !== payload?.index),
+				todos: state.todos.filter(todo => todo.id !== payload?.id),
 			};
 		default:
 			return state;
@@ -41,7 +46,12 @@ const reducer = (
 };
 
 export const useTodosState = () => {
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [state, dispatch] = useReducer(reducer, initialState, () => {
+		loadStateFromStorage<Todo[]>(keys.TODOS).then(data => {
+			dispatch({ type: 'LOAD', payload: { all: data ? data : [] } });
+		});
+		return { ...initialState };
+	});
 
 	useEffect(() => {
 		if (!state.todos) {

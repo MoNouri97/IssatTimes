@@ -42,9 +42,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderRadius: 10,
-		marginVertical: 10,
+		// marginVertical: 10,
 		padding: 10,
 		// elevation: 10,
+		overflow: 'hidden',
 	},
 	text: {
 		color: color.lighter,

@@ -8,6 +8,8 @@ import AppBtn from './AppBtn';
 import AppText from './AppText';
 import FormInput from './form/FormInput';
 import { TodosContext } from '../context/Todos/TodosContext';
+import TasksList from './TasksList';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
 	day: number;
@@ -16,14 +18,14 @@ interface Props {
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const TasksModal: React.FC<Props> = ({ day, subject }) => {
-	const [newTodo, setNewTodo] = useState(`${day} ${subject}`);
+	const [newTodo, setNewTodo] = useState('');
 	const { state, dispatch } = useContext(TodosContext);
 	const handleAdd = () => {
 		dispatch!({
 			type: 'ADD',
 			payload: {
 				todo: {
-					id: '1',
+					id: state.todos.length + '',
 					day: days[day],
 					subject,
 					done: false,
@@ -31,6 +33,9 @@ const TasksModal: React.FC<Props> = ({ day, subject }) => {
 				},
 			},
 		});
+	};
+	const handleDelete = (id: string) => {
+		dispatch!({ type: 'DELETE', payload: { id } });
 	};
 	return (
 		<View>
@@ -44,15 +49,16 @@ const TasksModal: React.FC<Props> = ({ day, subject }) => {
 					<Feather name='send' size={20} color={color.fg} />
 				</AppBtn>
 			</View>
-			<AppText style={defaultStyles.title}>Tasks</AppText>
-
-			{state.todos.map((todo, i) => (
-				<View key={i}>
-					<AppText>{todo.day}</AppText>
-					<AppText>{todo.subject}</AppText>
-					<AppText>{todo.name}</AppText>
-				</View>
-			))}
+			<TasksList
+				title='Today'
+				todos={state.todos.filter(val => val.day == days[day])}
+				onDelete={handleDelete}
+			/>
+			<TasksList
+				onDelete={handleDelete}
+				title='All Tasks'
+				todos={state.todos.filter(val => val.day != days[day])}
+			/>
 		</View>
 	);
 };
@@ -65,15 +71,15 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 		marginLeft: 10,
 		textAlign: 'center',
-		padding: 20,
+		padding: 15,
 		marginVertical: 0,
 	},
 	row: {
 		flexDirection: 'row',
 		width: '100%',
-		height: 70,
 		alignItems: 'stretch',
 		justifyContent: 'space-between',
+		marginBottom: 10,
 	},
 });
 export default TasksModal;

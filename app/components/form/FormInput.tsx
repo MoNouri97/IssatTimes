@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 		color: color.fg,
 		fontSize: 20,
 		flex: 1,
-		padding: 20,
+		padding: 15,
 	},
 	inputIcon: {
 		minWidth: 30,

@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		flexDirection: 'row',
 		marginBottom: 2,
-		paddingHorizontal: 10,
+		padding: 10,
 	},
 	subBtn: {
 		backgroundColor: color.bg,

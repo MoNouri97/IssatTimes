@@ -11,6 +11,7 @@ import {
 	Dimensions,
 	Easing,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import AppBtn from '../components/AppBtn';
 import AppText from '../components/AppText';
 import TasksModal from '../components/TasksModal';
@@ -29,7 +30,8 @@ const ModalScreen: React.FC<Props> = ({ visible, onRequestClose, info }) => {
 			return;
 		}
 		Animated.timing(translateY, {
-			toValue: SCREEN_H * 0.3,
+			// toValue: 0,
+			toValue: SCREEN_H * 0.2,
 			duration: 300,
 			useNativeDriver: true,
 		}).start();
@@ -54,17 +56,17 @@ const ModalScreen: React.FC<Props> = ({ visible, onRequestClose, info }) => {
 			>
 				<View style={styles.overlay}>
 					<View style={styles.container}>
-						<>
-							<Pressable
-								style={styles.closeBtn}
-								onPress={handleDismiss}
-							></Pressable>
-							<Animated.View
-								style={[styles.modal, { transform: [{ translateY }] }]}
-							>
+						<Pressable
+							style={styles.closeBtn}
+							onPress={handleDismiss}
+						></Pressable>
+						<Animated.View
+							style={[styles.modal, { transform: [{ translateY }] }]}
+						>
+							<ScrollView contentContainerStyle={{}}>
 								<TasksModal {...info} />
-							</Animated.View>
-						</>
+							</ScrollView>
+						</Animated.View>
 					</View>
 				</View>
 			</Modal>
@@ -87,7 +89,8 @@ const styles = StyleSheet.create({
 	},
 	modal: {
 		position: 'absolute',
-		bottom: 0,
+		// bottom: 0,
+		height: SCREEN_H * 0.8,
 		top: 0,
 		borderTopEndRadius: 27,
 		borderTopLeftRadius: 27,
