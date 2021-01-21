@@ -5,6 +5,7 @@ import {
 	StyleProp,
 	StyleSheet,
 	TouchableOpacity,
+	View,
 	ViewStyle,
 } from 'react-native';
 import color from '../config/color';
@@ -22,14 +23,13 @@ const AppBtn: React.FC<Props> = ({
 	onPress,
 	style,
 }) => {
-	const btnStyle: StyleProp<ViewStyle> = {
-		...styles.btn,
-		backgroundColor: primary ? color.primary : color.secondary,
-	};
-
 	return (
 		<Pressable
-			style={[btnStyle, style]}
+			style={[
+				styles.btn,
+				{ backgroundColor: primary ? color.primary : color.secondary },
+				style,
+			]}
 			onPress={onPress}
 			android_ripple={{ borderless: false, color: color.fg }}
 		>
@@ -41,10 +41,7 @@ const styles = StyleSheet.create({
 	btn: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderRadius: 10,
-		// marginVertical: 10,
 		padding: 10,
-		// elevation: 10,
 		overflow: 'hidden',
 	},
 	text: {

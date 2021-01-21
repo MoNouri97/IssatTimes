@@ -17,6 +17,8 @@ import { groupInfo } from '../types';
 import { groupList } from '../utils/groupList';
 import defaultStyles from '../config/defaultStyles';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
+import { useBackButton } from '@react-navigation/native';
+import { useBackHandler } from '@react-native-community/hooks';
 
 const SelectGroup: React.FC = () => {
 	const [search, setSearch] = useState('');
@@ -32,6 +34,14 @@ const SelectGroup: React.FC = () => {
 		setSubGroup(subGroup == 1 ? 2 : 1);
 	};
 
+	// useBackHandler(() => {
+	// 	if (shouldBeHandledHere) {
+	// 		// handle it
+	// 		return true
+	// 	}
+	// 	// let the default thing happen
+	// 	return false
+	// });
 	return (
 		<AppScreen style={styles.bg}>
 			<View style={styles.container}>

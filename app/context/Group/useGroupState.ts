@@ -14,7 +14,7 @@ export const useGroupState = () => {
 	});
 
 	useEffect(() => {
-		if (!group) {
+		if (!group || group.name == '') {
 			return;
 		}
 		saveStateToStorage(group, keys.GROUP);

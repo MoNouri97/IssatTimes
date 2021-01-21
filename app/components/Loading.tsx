@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 		height: '100%',
 		alignItems: 'baseline',
 		// justifyContent: 'center',
-		backgroundColor: color.lighter,
+		backgroundColor: color.bg,
 		paddingHorizontal: 40,
 		width: '100%',
 	},
