@@ -29,6 +29,7 @@
       "favicon": "./app/assets/favicon.png"
     },
     "description": "",
-    "githubUrl": "https://github.com/MoNouri97/IssatTimes"
+    "githubUrl": "https://github.com/MoNouri97/IssatTimes",
+    "privacy": "public"
   }
 }
