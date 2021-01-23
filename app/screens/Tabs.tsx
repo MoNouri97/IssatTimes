@@ -13,7 +13,11 @@ import { fetchHtml } from '../utils/fetchIssat';
 import { getUpdateDate } from '../utils/getUpdateDate';
 import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
-import { StackNavigationProp } from '@react-navigation/stack';
+import {
+	createStackNavigator,
+	StackNavigationProp,
+	TransitionPresets,
+} from '@react-navigation/stack';
 import { ParamList } from '../types';
 import ScheduleAlt from './ScheduleAlt';
 import TabHeader from '../components/AppTabBar/TabHeader';
@@ -37,8 +41,12 @@ const ITEM_WIDTH = Dimensions.get('window').width;
 
 type refType = FlatList<string> | null;
 interface props {
-	navigation: StackNavigationProp<ParamList, 'Main'>;
+	navigation: StackNavigationProp<ParamList, 'Tabs'>;
 }
+
+// creating modal stack
+const Stack = createStackNavigator();
+
 const Tabs: React.FC<props> = ({ navigation }) => {
 	const subjectState = useContext(SubjectsContext);
 	const scrollX = useRef(new Animated.Value(0)).current;
@@ -70,7 +78,7 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 
 		checkForUpdate().then(shouldUpdate => {
 			if (shouldUpdate) {
-				alert('should update ...');
+				alert('should update data from site...');
 				console.log('should update ...');
 			} else {
 				console.log('should not update ...');
@@ -115,6 +123,7 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 					data={dayTabs}
 					renderItem={day => (
 						<ScheduleAlt
+							navigation={navigation}
 							dayIndex={day.index}
 							haveTasks={todoDays.includes(days[day.index])}
 						/>

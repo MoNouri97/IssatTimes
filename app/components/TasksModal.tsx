@@ -9,14 +9,23 @@ import FormInput from './form/FormInput';
 import { TodosContext } from '../context/Todos/TodosContext';
 import TasksList from './TasksList';
 import { days } from '../config/vars';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ParamList } from '../types';
+import { RouteProp } from '@react-navigation/native';
 
 interface Props {
 	day: number;
 	subject: string;
+	navigation: StackNavigationProp<ParamList, 'Modal'>;
+	route: RouteProp<ParamList, 'Modal'>;
 }
 
-const TasksModal: React.FC<Props> = ({ day, subject }) => {
+const TasksModal: React.FC<Props> = ({ day, subject, navigation, route }) => {
 	const [newTodo, setNewTodo] = useState('');
+	const [info] = useState({
+		day: day ?? route.params.day,
+		subject: subject ?? route.params.subject,
+	});
 	const {
 		state: { todos },
 		dispatch,
@@ -31,8 +40,8 @@ const TasksModal: React.FC<Props> = ({ day, subject }) => {
 			payload: {
 				todo: {
 					id: `${newId}`,
-					day: days[day],
-					subject,
+					day: days[info.day],
+					subject: info.subject,
 					done: false,
 					name: newTodo,
 				},
@@ -44,17 +53,27 @@ const TasksModal: React.FC<Props> = ({ day, subject }) => {
 		dispatch!({ type: 'DELETE', payload: { id } });
 	};
 	return (
-		<View>
-			{subject !== '' && (
+		<View
+			style={{
+				padding: 27,
+			}}
+		>
+			{info.subject !== '' && (
 				<>
-					<AppText style={styles.title}>{`${days[day]}-${subject}`}</AppText>
+					<AppText style={styles.title}>
+						{days[info.day]}-{info.subject}
+					</AppText>
 					<View style={styles.row}>
 						<FormInput
 							value={newTodo}
 							setValue={setNewTodo}
 							placeholder='Do Homework ...'
 						/>
-						<AppBtn style={styles.btn} onPress={handleAdd}>
+						<AppBtn
+							style={styles.outerBtn}
+							innerStyle={styles.btn}
+							onPress={handleAdd}
+						>
 							<Feather name='send' size={20} color={color.fg} />
 						</AppBtn>
 					</View>
@@ -62,25 +81,27 @@ const TasksModal: React.FC<Props> = ({ day, subject }) => {
 			)}
 			<AppText style={styles.title}>Today</AppText>
 			<TasksList
-				todos={todos.filter(val => val.day == days[day])}
+				todos={todos.filter(val => val.day == days[info.day])}
 				onDelete={handleDelete}
 			/>
 			<AppText style={styles.title}>All Tasks</AppText>
 			<TasksList
 				onDelete={handleDelete}
-				todos={todos.filter(val => val.day != days[day])}
+				todos={todos.filter(val => val.day != days[info.day])}
 			/>
 		</View>
 	);
 };
 const styles = StyleSheet.create({
-	btn: {
-		backgroundColor: color.lighter,
-		color: color.fg,
+	outerBtn: {
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderRadius: 5,
 		marginLeft: 5,
+	},
+	btn: {
+		backgroundColor: color.lighter,
+		color: color.fg,
 		textAlign: 'center',
 		padding: 15,
 	},

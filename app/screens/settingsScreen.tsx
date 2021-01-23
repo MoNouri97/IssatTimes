@@ -34,14 +34,22 @@ const settingsScreen: React.FC<Props> = ({ navigation }) => {
 			<AppText style={styles.header}>Group Info</AppText>
 			<View style={styles.row}>
 				<AppText>Sub-Group</AppText>
-				<AppBtn onPress={toggleSubGroup} style={styles.subBtn}>
+				<AppBtn
+					onPress={toggleSubGroup}
+					style={styles.subBtn}
+					innerStyle={styles.inner}
+				>
 					<AppText>{subGroup}</AppText>
 				</AppBtn>
 			</View>
 			<View style={styles.row}>
 				<AppText>Group</AppText>
 				<AppText>{group?.name}</AppText>
-				<AppBtn onPress={handleChangeGroup} style={styles.subBtn}>
+				<AppBtn
+					onPress={handleChangeGroup}
+					style={styles.subBtn}
+					innerStyle={styles.inner}
+				>
 					<AppText>Change</AppText>
 				</AppBtn>
 			</View>
@@ -49,6 +57,7 @@ const settingsScreen: React.FC<Props> = ({ navigation }) => {
 	);
 };
 const styles = StyleSheet.create({
+	inner: { paddingVertical: 30, paddingHorizontal: 20 },
 	container: {
 		alignItems: 'center',
 		justifyContent: 'flex-start',
@@ -75,8 +84,6 @@ const styles = StyleSheet.create({
 		marginLeft: 10,
 		// minWidth: 70,
 		textAlign: 'center',
-		paddingVertical: 10,
-		paddingHorizontal: 20,
 	},
 });
 export default settingsScreen;

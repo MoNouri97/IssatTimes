@@ -29,9 +29,14 @@ const TasksList: React.FC<Props> = ({ todos, onDelete }) => {
 							<AppText numberOfLines={1} style={{ flex: 1 }}>
 								{todo.name}
 							</AppText>
-							<AppText>| {todo.day}</AppText>
-							<AppText>-{todo.subject}</AppText>
-							<AppBtn style={styles.btn} onPress={() => onDelete(todo.id)}>
+							<AppText style={styles.lightTxt}>
+								| {todo.day}-{todo.subject}
+							</AppText>
+							<AppBtn
+								style={styles.btn}
+								innerStyle={styles.innerBtn}
+								onPress={() => onDelete(todo.id)}
+							>
 								<Feather name='check' size={20} color={color.fg} />
 							</AppBtn>
 						</View>
@@ -42,6 +47,11 @@ const TasksList: React.FC<Props> = ({ todos, onDelete }) => {
 	);
 };
 const styles = StyleSheet.create({
+	lightTxt: {
+		color: color.medium,
+		fontSize: 15,
+		fontFamily: 'Lato_300Light',
+	},
 	todoItem: {
 		backgroundColor: color.lighter,
 		borderRadius: 5,
@@ -50,12 +60,15 @@ const styles = StyleSheet.create({
 		paddingLeft: 10,
 		flexDirection: 'row',
 		alignItems: 'center',
+		height: 60,
 	},
 	btn: {
 		backgroundColor: color.black,
-		padding: 15,
 		borderRadius: 0,
 		marginLeft: 5,
+	},
+	innerBtn: {
+		padding: 20,
 	},
 });
 export default TasksList;

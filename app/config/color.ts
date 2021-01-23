@@ -5,5 +5,5 @@ export default {
 	fg: '#ddd',
 	lighter: '#252836',
 	bg: '#1F1D2B',
-	medium: '#bbb',
+	medium: '#aaa',
 };

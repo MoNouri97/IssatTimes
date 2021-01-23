@@ -27,6 +27,7 @@ import {
 	TransitionPresets,
 } from '@react-navigation/stack';
 import settingsScreen from './app/screens/settingsScreen';
+import MainScreen from './app/screens/MainScreen';
 
 const Stack = createStackNavigator();
 
@@ -78,8 +79,8 @@ export default function App() {
 											screenOptions={{ ...TransitionPresets.SlideFromRightIOS }}
 										>
 											<Stack.Screen
-												name='Home'
-												component={Tabs}
+												name='Main'
+												component={MainScreen}
 												options={{ headerShown: false }}
 											/>
 											<Stack.Screen

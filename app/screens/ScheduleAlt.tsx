@@ -9,13 +9,18 @@ import ModalScreen from './ModalScreen';
 import TodosContext from '../context/Todos/TodosContext';
 import defaultStyles from '../config/defaultStyles';
 import { days } from '../config/vars';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ParamList } from '../types';
 
 const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
 
-const ScheduleAlt: React.FC<{ dayIndex: number; haveTasks: boolean }> = ({
-	dayIndex,
-	haveTasks,
-}) => {
+interface Props {
+	dayIndex: number;
+	haveTasks: boolean;
+	navigation: StackNavigationProp<ParamList, 'Tabs'>;
+}
+
+const ScheduleAlt: React.FC<Props> = ({ dayIndex, haveTasks, navigation }) => {
 	// context
 	const { state } = useContext(SubjectsContext);
 	const { group } = useContext(GroupContext);
@@ -62,9 +67,10 @@ const ScheduleAlt: React.FC<{ dayIndex: number; haveTasks: boolean }> = ({
 	// }, [groupData]);
 	const handleSelect = useCallback(
 		(selected: string) => {
-			setSelected(selected);
-			setShowModal(!showModal);
-			console.log(showModal);
+			navigation.navigate('Modal', { day: dayIndex, subject: selected });
+			// setSelected(selected);
+			// setShowModal(!showModal);
+			// console.log(showModal);
 		},
 		[setSelected, setShowModal, showModal],
 	);

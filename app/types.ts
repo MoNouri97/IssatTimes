@@ -16,6 +16,11 @@ export type ParamList = {
 	Main: undefined;
 	SelectGroup: undefined;
 	Settings: undefined;
+	Tabs: undefined;
+	Modal: {
+		day: number;
+		subject: string;
+	};
 };
 
 export type loadingStates =
