@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import {
 	useFonts,
@@ -14,17 +14,18 @@ import { useSubjectsState } from './app/context/Subjects/useSubjectsState';
 import AppScreen from './app/components/AppScreen';
 import Loading from './app/components/Loading';
 import { useGroupState } from './app/context/Group/useGroupState';
-import { GroupContext } from './app/context/Group/GroupContext';
-import { useTodosState } from './app/context/Todos/useTodosState';
-import { TodosContext, TodosProvider } from './app/context/Todos/TodosContext';
+import { GroupProvider } from './app/context/Group/GroupContext';
+import { TodosProvider } from './app/context/Todos/TodosContext';
 import SelectGroup from './app/screens/SelectGroup';
 import { AppLoading } from 'expo';
 import { groupInfo, Subject } from './app/types';
 import { loadStateFromStorage } from './app/utils/ManageAsyncStorage';
 import { keys, MyTheme } from './app/config/vars';
 import color from './app/config/color';
-import TestScreen from './app/screens/TestScreen';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+	createStackNavigator,
+	TransitionPresets,
+} from '@react-navigation/stack';
 import settingsScreen from './app/screens/settingsScreen';
 
 const Stack = createStackNavigator();
@@ -41,18 +42,13 @@ export default function App() {
 		Lato_900Black,
 	});
 	const loadAppState = async () => {
-		const [subjectsData, groupData] = await Promise.all([
+		const [subjectsData] = await Promise.all([
 			loadStateFromStorage<Subject[][]>(keys.SUBJECTS),
-			loadStateFromStorage<groupInfo>(keys.GROUP),
 		]);
 		// console.log({ subjectsData, groupData });
 
 		if (subjectsData) {
 			subjectsValue.dispatch({ type: 'UPDATE', payload: subjectsData });
-		}
-
-		if (groupData) {
-			groupValue.setGroup(groupData);
 		}
 	};
 
@@ -66,7 +62,7 @@ export default function App() {
 	return (
 		<AppScreen style={styles.container}>
 			<StatusBar backgroundColor={color.bg} barStyle='light-content' />
-			<GroupContext.Provider value={groupValue}>
+			<GroupProvider>
 				<SubjectsContext.Provider value={subjectsValue}>
 					<TodosProvider>
 						{!groupValue.group.id ? (
@@ -77,7 +73,10 @@ export default function App() {
 									<Loading onLoaded={() => console.log('loaded')} />
 								) : (
 									<NavigationContainer theme={MyTheme}>
-										<Stack.Navigator headerMode='screen'>
+										<Stack.Navigator
+											headerMode='screen'
+											screenOptions={{ ...TransitionPresets.SlideFromRightIOS }}
+										>
 											<Stack.Screen
 												name='Home'
 												component={Tabs}
@@ -87,6 +86,11 @@ export default function App() {
 												name='Settings'
 												component={settingsScreen}
 											/>
+											<Stack.Screen
+												name='SelectGroup'
+												component={SelectGroup}
+												options={{ title: 'Change Group' }}
+											/>
 										</Stack.Navigator>
 									</NavigationContainer>
 								)}
@@ -94,7 +98,7 @@ export default function App() {
 						)}
 					</TodosProvider>
 				</SubjectsContext.Provider>
-			</GroupContext.Provider>
+			</GroupProvider>
 		</AppScreen>
 	);
 }

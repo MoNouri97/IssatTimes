@@ -14,7 +14,7 @@ export type groupInfo = {
 export type ParamList = {
 	weekDay: { index: number };
 	Main: undefined;
-	'Choose Group': {};
+	SelectGroup: undefined;
 	Settings: undefined;
 };
 

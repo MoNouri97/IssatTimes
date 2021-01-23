@@ -1,4 +1,5 @@
 import { DefaultTheme } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useContext, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AppBtn from '../components/AppBtn';
@@ -7,21 +8,22 @@ import AppText from '../components/AppText';
 import color from '../config/color';
 import { GroupContext } from '../context/Group/GroupContext';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
+import { ParamList } from '../types';
 
-interface Props {}
-
-const settingsScreen: React.FC<Props> = ({}) => {
+interface Props {
+	navigation: StackNavigationProp<ParamList, 'Settings'>;
+}
+const settingsScreen: React.FC<Props> = ({ navigation }) => {
 	const { group, setGroup } = useContext(GroupContext);
 	const { dispatch } = useContext(SubjectsContext);
 	const [subGroup, setSubGroup] = useState(group?.subGroup!);
-
-	// const [subGroup, setSubGroup] = useState<1 | 2>(() => group?.subGroup || 1);
 
 	const toggleSubGroup = () => {
 		setSubGroup(subGroup == 1 ? 2 : 1);
 	};
 	const handleChangeGroup = () => {
-		setGroup!({ id: '', name: '', subGroup: 1 });
+		navigation.navigate('SelectGroup');
+		// setGroup!({ id: '', name: '', subGroup: 1 });
 	};
 	useEffect(() => {
 		setGroup!({ ...group!, subGroup });

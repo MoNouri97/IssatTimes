@@ -34,19 +34,6 @@ const SelectGroup: React.FC = () => {
 		setSubGroup(subGroup == 1 ? 2 : 1);
 	};
 
-	useBackHandler(() => {
-		if (true) {
-			loadStateFromStorage<groupInfo>(keys.GROUP).then(groupData => {
-				if (groupData) {
-					setGroup!(groupData);
-				}
-			});
-			// handle it
-			return true;
-		}
-		// let the default thing happen
-		return false;
-	});
 	return (
 		<AppScreen style={styles.bg}>
 			<View style={styles.container}>
