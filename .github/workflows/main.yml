@@ -1,3 +1,8 @@
+name: Expo CI CD
+
+on:
+  push:
+    branches: [master]
 jobs:
   Publish-On-Expo:
     runs-on: ubuntu-latest
