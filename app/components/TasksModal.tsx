@@ -8,7 +8,7 @@ import AppText from './AppText';
 import FormInput from './form/FormInput';
 import { TodosContext } from '../context/Todos/TodosContext';
 import TasksList from './TasksList';
-import { days } from '../config/vars';
+import { days, daysLong } from '../config/vars';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ParamList } from '../types';
 import { RouteProp } from '@react-navigation/native';
@@ -53,15 +53,14 @@ const TasksModal: React.FC<Props> = ({ day, subject, navigation, route }) => {
 		dispatch!({ type: 'DELETE', payload: { id } });
 	};
 	return (
-		<View
-			style={{
-				padding: 27,
-			}}
-		>
+		<View style={styles.container}>
+			<AppText style={styles.header}>
+				{info.subject ? 'Add A Task' : 'View Tasks'}
+			</AppText>
 			{info.subject !== '' && (
 				<>
 					<AppText style={styles.title}>
-						{days[info.day]}-{info.subject}
+						{daysLong[info.day]}-{info.subject}
 					</AppText>
 					<View style={styles.row}>
 						<FormInput
@@ -79,7 +78,7 @@ const TasksModal: React.FC<Props> = ({ day, subject, navigation, route }) => {
 					</View>
 				</>
 			)}
-			<AppText style={styles.title}>Today</AppText>
+			<AppText style={styles.title}>Tasks For {daysLong[info.day]}</AppText>
 			<TasksList
 				todos={todos.filter(val => val.day == days[info.day])}
 				onDelete={handleDelete}
@@ -93,6 +92,9 @@ const TasksModal: React.FC<Props> = ({ day, subject, navigation, route }) => {
 	);
 };
 const styles = StyleSheet.create({
+	container: {
+		padding: 27,
+	},
 	outerBtn: {
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -117,6 +119,11 @@ const styles = StyleSheet.create({
 		fontFamily: 'Lato_900Black',
 
 		marginVertical: 10,
+	},
+	header: {
+		fontSize: 40,
+		fontFamily: 'Lato_900Black',
+		marginBottom: 20,
 	},
 });
 export default TasksModal;

@@ -6,6 +6,11 @@ export const keys = {
 	GROUP: 'group',
 	TODOS: 'todos',
 };
+export const fonts = {
+	light: 'Lato_300Light',
+	regular: 'Lato_400Regular',
+	bold: 'Lato_900Black',
+};
 export const MyTheme = {
 	dark: true,
 	colors: {
@@ -18,3 +23,11 @@ export const MyTheme = {
 	},
 };
 export const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export const daysLong = [
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+];
