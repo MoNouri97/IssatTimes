@@ -56,13 +56,14 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 	const {
 		state: { todos },
 	} = useContext(TodosContext);
+
 	useEffect(() => {
 		let _days: string[] = [];
 		todos.forEach(todo =>
 			_days.includes(todo.day) ? null : (_days = [..._days, todo.day]),
 		);
 		setTodoDays(_days);
-	}, [todos]);
+	}, [todos, setTodoDays]);
 
 	const scrollTo = useCallback(
 		(index: number, animated: boolean = true) => {
@@ -90,6 +91,8 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 		const d = new Date();
 		const today = d.getDay() - 1;
 		const todayDate = d.getDate();
+		// initial scroll
+		scrollTo(today, true);
 
 		return days.map((day, i) => {
 			const date = todayDate + (i - today);
