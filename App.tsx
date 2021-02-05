@@ -76,7 +76,12 @@ export default function App() {
 									<NavigationContainer theme={MyTheme}>
 										<Stack.Navigator
 											headerMode='screen'
-											screenOptions={{ ...TransitionPresets.SlideFromRightIOS }}
+											screenOptions={{
+												...TransitionPresets.SlideFromRightIOS,
+												gestureEnabled: true,
+												gestureResponseDistance: { horizontal: 999 },
+												cardOverlayEnabled: true,
+											}}
 										>
 											<Stack.Screen
 												name='Main'
