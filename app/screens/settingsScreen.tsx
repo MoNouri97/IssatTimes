@@ -1,14 +1,14 @@
-import { DefaultTheme } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import AppBtn from '../components/AppBtn';
 import AppScreen from '../components/AppScreen';
 import AppText from '../components/AppText';
-import color from '../config/color';
+import { theme } from '../config/color';
 import { fonts, keys } from '../config/vars';
 import { GroupContext } from '../context/Group/GroupContext';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
+import { ThemeContext } from '../context/Theme/ThemeContext';
 import { ParamList } from '../types';
 import { displayDate } from '../utils/displayDate';
 import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
@@ -43,33 +43,52 @@ const settingsScreen: React.FC<Props> = ({ navigation }) => {
 			canUpdate = false;
 		};
 	}, [setLastUpdate]);
+	const themeCon = useContext(ThemeContext);
+	const color = useMemo(
+		() => (themeCon.theme == 'dark' ? theme.darkTheme : theme.lightTheme),
+		[themeCon],
+	);
+	const handleChangeTheme = () => {
+		themeCon.setTheme!(themeCon.theme == 'dark' ? 'light' : 'dark');
+	};
 
 	return (
 		<AppScreen style={styles.container}>
 			<AppText style={styles.header}>Group Info</AppText>
-			<View style={styles.row}>
+			<View style={[{ backgroundColor: color.lighter }, styles.row]}>
 				<AppText>Sub-Group</AppText>
 				<AppBtn
 					onPress={toggleSubGroup}
-					style={styles.subBtn}
+					style={[{ backgroundColor: color.bg }, styles.subBtn]}
 					innerStyle={styles.inner}
 				>
 					<AppText>{subGroup}</AppText>
 				</AppBtn>
 			</View>
-			<View style={styles.row}>
+			<View style={[{ backgroundColor: color.lighter }, styles.row]}>
 				<AppText>Group</AppText>
 				<AppText style={styles.subText}>{group?.name}</AppText>
 				<AppBtn
 					onPress={handleChangeGroup}
-					style={styles.subBtn}
+					style={[{ backgroundColor: color.bg }, styles.subBtn]}
 					innerStyle={styles.inner}
 				>
 					<AppText>Change</AppText>
 				</AppBtn>
 			</View>
+			<View style={[{ backgroundColor: color.lighter }, styles.row]}>
+				<AppText>Theme</AppText>
+				{/* <AppText style={styles.subText}>{themeCon.theme}</AppText> */}
+				<AppBtn
+					onPress={handleChangeTheme}
+					style={[{ backgroundColor: color.bg }, styles.subBtn]}
+					innerStyle={styles.inner}
+				>
+					<AppText>{themeCon.theme}</AppText>
+				</AppBtn>
+			</View>
 			<AppText style={styles.header}>Data</AppText>
-			<View style={styles.row}>
+			<View style={[{ backgroundColor: color.lighter }, styles.row]}>
 				<AppText>Latest Modification</AppText>
 				<AppText style={styles.subText}>
 					{lastUpdate && displayDate(new Date(lastUpdate))}
@@ -90,7 +109,6 @@ const styles = StyleSheet.create({
 		padding: 10,
 	},
 	row: {
-		backgroundColor: color.lighter,
 		width: '100%',
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -100,8 +118,6 @@ const styles = StyleSheet.create({
 		minHeight: 60,
 	},
 	subBtn: {
-		backgroundColor: color.bg,
-		color: color.fg,
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderRadius: 5,

@@ -3,14 +3,14 @@ import { Dimensions, FlatList, StyleSheet, View } from 'react-native';
 import Card from '../components/Card';
 import { SubjectsContext } from '../context/Subjects/SubjectsContext';
 import AppBtn from '../components/AppBtn';
-import color from '../config/color';
+import { theme } from '../config/color';
 import { GroupContext } from '../context/Group/GroupContext';
 import ModalScreen from './ModalScreen';
-import TodosContext from '../context/Todos/TodosContext';
 import defaultStyles from '../config/defaultStyles';
-import { days } from '../config/vars';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ParamList } from '../types';
+import { ThemeContext } from '../context/Theme/ThemeContext';
+import AppText from '../components/AppText';
 
 const LoadingIndicator = () => <AppBtn>Loading . . .</AppBtn>;
 
@@ -26,9 +26,6 @@ const ScheduleAlt: React.FC<Props> = ({ dayIndex, haveTasks, navigation }) => {
 	const { group } = useContext(GroupContext);
 	const [showModal, setShowModal] = useState(false);
 	const [selected, setSelected] = useState('');
-	const {
-		state: { todos },
-	} = useContext(TodosContext);
 
 	const groupData = useMemo(() => {
 		if (!state.subjects) return [];
@@ -58,25 +55,22 @@ const ScheduleAlt: React.FC<Props> = ({ dayIndex, haveTasks, navigation }) => {
 		return day;
 	}, [state.subjects, group]);
 
-	// const subjectWithTasks = useMemo(() => {
-	// 	return groupData.map(subject => {
-	// 		return todos.some(
-	// 			todo => todo.day === days[dayIndex] && todo.subject === subject.time,
-	// 		);
-	// 	});
-	// }, [groupData]);
 	const handleSelect = useCallback(
-		(selected: string) => {
-			navigation.navigate('Modal', { day: dayIndex, subject: selected });
+		(selectedSubj: string) => {
+			navigation.navigate('Modal', { day: dayIndex, subject: selectedSubj });
 			// setSelected(selected);
 			// setShowModal(!showModal);
 			// console.log(showModal);
 		},
 		[setSelected, setShowModal, showModal],
 	);
-
+	const themeCon = useContext(ThemeContext);
+	const color = useMemo(
+		() => (themeCon.theme == 'dark' ? theme.darkTheme : theme.lightTheme),
+		[themeCon],
+	);
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, { backgroundColor: color.bg }]}>
 			<ModalScreen
 				info={{ day: dayIndex, subject: selected }}
 				visible={showModal}
@@ -98,7 +92,7 @@ const ScheduleAlt: React.FC<Props> = ({ dayIndex, haveTasks, navigation }) => {
 			/>
 			{haveTasks && (
 				<AppBtn style={styles.tasksAlert} onPress={() => handleSelect('')}>
-					View Tasks
+					<AppText style={{ color: theme.darkTheme.fg }}> View Tasks</AppText>
 				</AppBtn>
 			)}
 		</View>
@@ -115,7 +109,6 @@ const styles = StyleSheet.create({
 		...defaultStyles.shadow,
 	},
 	container: {
-		backgroundColor: color.bg,
 		width: Dimensions.get('window').width,
 		flex: 1,
 		alignItems: 'center',
@@ -125,7 +118,7 @@ const styles = StyleSheet.create({
 	},
 	listContainer: {
 		padding: 20,
-		paddingTop: 0,
+		paddingTop: 5,
 	},
 	title: {
 		fontSize: 50,

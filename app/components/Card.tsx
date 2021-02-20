@@ -1,10 +1,24 @@
-import React, { useCallback, useRef } from 'react';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+} from 'react';
+import {
+	Animated,
+	Appearance,
+	Pressable,
+	StyleSheet,
+	useColorScheme,
+	View,
+} from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
-import color from '../config/color';
+import { theme } from '../config/color';
 import { Subject } from '../types';
 import AppText from './AppText';
 import defaultStyles from '../config/defaultStyles';
+import { ThemeContext } from '../context/Theme/ThemeContext';
 
 const timesArr = {
 	S1: {
@@ -37,6 +51,7 @@ const timesArr = {
 	},
 };
 
+// let color = theme.darkTheme;
 type Props = Subject & { onPress: (s: string) => void; bubble?: boolean };
 const AppCard: React.FC<Props> = ({
 	name,
@@ -63,15 +78,22 @@ const AppCard: React.FC<Props> = ({
 			}).start(() => onPress(time));
 		});
 	}, [onPress]);
+
+	const themeCon = useContext(ThemeContext);
+	const color = useMemo(
+		() => (themeCon.theme == 'dark' ? theme.darkTheme : theme.lightTheme),
+		[themeCon],
+	);
+
 	return (
-		<Pressable
-			// style={{ flex: 1 }}
-			collapsable
-			// onLongPress={handlePress}
-			onPress={handlePress}
-			// android_ripple={{ borderless: false, color: color.fg }}
-		>
-			<Animated.View style={[styles.mainContent, { transform: [{ scale }] }]}>
+		<Pressable collapsable onPress={handlePress}>
+			<Animated.View
+				style={[
+					{ backgroundColor: color.lighter },
+					styles.mainContent,
+					{ transform: [{ scale }] },
+				]}
+			>
 				<View
 					style={[
 						styles.tag,
@@ -79,10 +101,22 @@ const AppCard: React.FC<Props> = ({
 					]}
 				>
 					<Feather name='user' size={20} color={color.lighter} />
-					<AppText style={styles.tagText}>{teacher}</AppText>
+					<AppText style={[styles.tagText, { color: theme.lightTheme.bg }]}>
+						{teacher}
+					</AppText>
 				</View>
 				<View style={[styles.titleContainer]}>
-					<AppText style={styles.title}>{name}</AppText>
+					<AppText
+						style={[
+							{
+								color: color.fg,
+							},
+							styles.title,
+						]}
+						numberOfLines={3}
+					>
+						{name}
+					</AppText>
 					<View style={styles.time}>
 						<AppText>{time}</AppText>
 						<AppText style={styles.timeClock}>
@@ -90,7 +124,7 @@ const AppCard: React.FC<Props> = ({
 						</AppText>
 					</View>
 				</View>
-				<AppText style={styles.type}>{type}</AppText>
+				<AppText style={[{ color: color.bg }, styles.type]}>{type}</AppText>
 				{bubble && (
 					<View
 						style={{
@@ -112,7 +146,9 @@ const AppCard: React.FC<Props> = ({
 							color={color.medium}
 							size={20}
 						/>
-						<AppText style={styles.subtitleText}>{regime} </AppText>
+						<AppText style={[{ color: color.medium }, styles.subtitleText]}>
+							{regime}{' '}
+						</AppText>
 					</View>
 					<View style={styles.subTitle}>
 						<MaterialCommunityIcons
@@ -120,7 +156,9 @@ const AppCard: React.FC<Props> = ({
 							color={color.medium}
 							size={20}
 						/>
-						<AppText style={styles.subtitleText}>{location} </AppText>
+						<AppText style={[{ color: color.medium }, styles.subtitleText]}>
+							{location}{' '}
+						</AppText>
 					</View>
 				</View>
 			</Animated.View>
@@ -132,8 +170,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	mainContent: {
-		backgroundColor: color.lighter,
-		// backgroundColor: color.light,
 		borderRadius: 27,
 		flex: 1,
 		overflow: 'hidden',
@@ -142,7 +178,7 @@ const styles = StyleSheet.create({
 		paddingLeft: 30,
 		paddingRight: 10,
 		alignItems: 'flex-start',
-		// elevation: 1,
+		// elevation: 5,
 	},
 
 	row: {
@@ -156,7 +192,6 @@ const styles = StyleSheet.create({
 	},
 	subtitleText: {
 		fontFamily: 'Lato_300Light',
-		color: color.medium,
 		marginHorizontal: 10,
 		fontSize: 13,
 	},
@@ -175,7 +210,6 @@ const styles = StyleSheet.create({
 	},
 	tagText: {
 		marginHorizontal: 10,
-		color: color.fg,
 		fontSize: 15,
 		fontFamily: 'Lato_300Light',
 	},
@@ -193,7 +227,6 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 15,
 		textTransform: 'uppercase',
-		color: color.fg,
 		fontFamily: 'Lato_900Black',
 		flexShrink: 1,
 		maxWidth: '50%',
@@ -210,7 +243,6 @@ const styles = StyleSheet.create({
 		right: 10,
 		fontSize: 50,
 		fontFamily: 'Lato_900Black',
-		color: color.bg,
 	},
 
 	textContainer: {
