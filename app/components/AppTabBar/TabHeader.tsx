@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import {
 	Animated,
 	StyleSheet,
@@ -6,9 +6,9 @@ import {
 	Dimensions,
 	Pressable,
 } from 'react-native';
-import color from '../../config/color';
+import { theme } from '../../config/color';
 import defaultStyles from '../../config/defaultStyles';
-import TodosContext from '../../context/Todos/TodosContext';
+import { ThemeContext } from '../../context/Theme/ThemeContext';
 
 const { width } = Dimensions.get('window');
 interface Props {
@@ -22,6 +22,11 @@ const TabHeader: React.FC<Props> = ({ labels, scrollX, onClick, todoDays }) => {
 	const onPress = (i: number) => {
 		onClick(i);
 	};
+	const themeCon = useContext(ThemeContext);
+	const color = useMemo(
+		() => (themeCon.theme == 'dark' ? theme.darkTheme : theme.lightTheme),
+		[themeCon],
+	);
 
 	return (
 		<View

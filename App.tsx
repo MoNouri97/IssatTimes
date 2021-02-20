@@ -28,8 +28,8 @@ import {
 } from '@react-navigation/stack';
 import settingsScreen from './app/screens/settingsScreen';
 import MainScreen from './app/screens/MainScreen';
-
-const Stack = createStackNavigator();
+import { ThemeProvider } from './app/context/Theme/ThemeContext';
+import MainNavContainer from './app/components/MainNavContainer';
 
 export default function App() {
 	const [isReady, setIsReady] = useState(false);
@@ -63,48 +63,25 @@ export default function App() {
 	return (
 		<AppScreen style={styles.container}>
 			<StatusBar backgroundColor={color.bg} barStyle='light-content' />
-			<GroupProvider>
-				<SubjectsContext.Provider value={subjectsValue}>
-					<TodosProvider>
-						{!groupValue.group.id ? (
-							<SelectGroup />
-						) : (
-							<View style={styles.container}>
-								{subjectsValue.state.loading ? (
-									<Loading onLoaded={() => console.log('loaded')} />
-								) : (
-									<NavigationContainer theme={MyTheme}>
-										<Stack.Navigator
-											headerMode='screen'
-											screenOptions={{
-												...TransitionPresets.SlideFromRightIOS,
-												gestureEnabled: true,
-												gestureResponseDistance: { horizontal: 999 },
-												cardOverlayEnabled: true,
-											}}
-										>
-											<Stack.Screen
-												name='Main'
-												component={MainScreen}
-												options={{ headerShown: false }}
-											/>
-											<Stack.Screen
-												name='Settings'
-												component={settingsScreen}
-											/>
-											<Stack.Screen
-												name='SelectGroup'
-												component={SelectGroup}
-												options={{ title: 'Change Group' }}
-											/>
-										</Stack.Navigator>
-									</NavigationContainer>
-								)}
-							</View>
-						)}
-					</TodosProvider>
-				</SubjectsContext.Provider>
-			</GroupProvider>
+			<ThemeProvider>
+				<GroupProvider>
+					<SubjectsContext.Provider value={subjectsValue}>
+						<TodosProvider>
+							{!groupValue.group.id ? (
+								<SelectGroup />
+							) : (
+								<View style={styles.container}>
+									{subjectsValue.state.loading ? (
+										<Loading onLoaded={() => console.log('loaded')} />
+									) : (
+										<MainNavContainer />
+									)}
+								</View>
+							)}
+						</TodosProvider>
+					</SubjectsContext.Provider>
+				</GroupProvider>
+			</ThemeProvider>
 		</AppScreen>
 	);
 }

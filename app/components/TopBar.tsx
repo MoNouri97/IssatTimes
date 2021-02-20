@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import color from '../config/color';
+import { theme } from '../config/color';
 import defaultStyles from '../config/defaultStyles';
 import AppText from './AppText';
+import { ThemeContext } from '../context/Theme/ThemeContext';
 
 interface Props {
 	onConfigPress: () => void;
 }
 
 const TopBar: React.FC<Props> = ({ onConfigPress }) => {
+	const themeCon = useContext(ThemeContext);
+	const color = useMemo(
+		() => (themeCon.theme == 'dark' ? theme.darkTheme : theme.lightTheme),
+		[themeCon],
+	);
 	return (
-		<View style={styles.container}>
+		<View style={[styles.container, { backgroundColor: color.bg }]}>
 			<AppText style={defaultStyles.AppLogo}>ISSAT Times</AppText>
 			<Pressable
 				android_ripple={{ borderless: true, color: color.medium }}
@@ -39,7 +45,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		backgroundColor: color.bg,
 	},
 	icon: {
 		padding: 10,

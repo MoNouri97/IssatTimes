@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Feather } from '@expo/vector-icons';
 import {
 	StyleSheet,
@@ -7,7 +7,8 @@ import {
 	TextInputProps,
 	View,
 } from 'react-native';
-import color from '../../config/color';
+import { theme } from '../../config/color';
+import { ThemeContext } from '../../context/Theme/ThemeContext';
 
 interface Props {
 	icon?: string;
@@ -21,10 +22,15 @@ const FormInput: React.FC<Props & TextInputProps> = ({
 	setValue,
 	...props
 }) => {
+	const themeCon = useContext(ThemeContext);
+	const color = useMemo(
+		() => (themeCon.theme == 'dark' ? theme.darkTheme : theme.lightTheme),
+		[themeCon],
+	);
 	return (
-		<View style={styles.inputContainer}>
+		<View style={[styles.inputContainer, { backgroundColor: color.lighter }]}>
 			<TextInput
-				style={styles.input}
+				style={[styles.input, { color: color.fg }]}
 				placeholderTextColor={color.medium}
 				value={value}
 				onChange={e => {
@@ -45,7 +51,6 @@ const FormInput: React.FC<Props & TextInputProps> = ({
 };
 const styles = StyleSheet.create({
 	input: {
-		color: color.fg,
 		fontSize: 20,
 		flex: 1,
 		padding: 15,
@@ -54,7 +59,6 @@ const styles = StyleSheet.create({
 		minWidth: 30,
 	},
 	inputContainer: {
-		backgroundColor: color.lighter,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
