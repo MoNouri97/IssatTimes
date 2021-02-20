@@ -9,5 +9,5 @@ export const loadStateFromStorage = async <T>(key: string) => {
 };
 export const saveStateToStorage = (toSave: any | null, key: string) => {
 	AsyncStorage.setItem(key, JSON.stringify(toSave));
-	console.log(`Saved ${key} - ${toSave.length}`);
+	console.log(`Saved ${key} - ${toSave}`);
 };

@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
-import color from '../config/color';
+import { theme } from '../config/color';
 import defaultStyles from '../config/defaultStyles';
 import { Todo } from '../types';
 import AppBtn from './AppBtn';
 import AppText from './AppText';
+import { ThemeContext } from '../context/Theme/ThemeContext';
 
 interface Props {
 	todos: Todo[];
@@ -14,6 +15,11 @@ interface Props {
 }
 
 const TasksList: React.FC<Props> = ({ todos, onDelete }) => {
+	const themeCon = useContext(ThemeContext);
+	const color = useMemo(
+		() => (themeCon.theme == 'dark' ? theme.darkTheme : theme.lightTheme),
+		[themeCon],
+	);
 	return (
 		<>
 			<View
@@ -25,19 +31,27 @@ const TasksList: React.FC<Props> = ({ todos, onDelete }) => {
 					<AppText style={{ padding: 10 }}>Nothing To Do ... </AppText>
 				) : (
 					todos.map(todo => (
-						<View key={todo.id} style={styles.todoItem}>
+						<View
+							key={todo.id}
+							style={[styles.todoItem, { backgroundColor: color.lighter }]}
+						>
 							<AppText numberOfLines={1} style={{ flex: 1 }}>
 								{todo.name}
 							</AppText>
-							<AppText style={styles.lightTxt}>
+							<AppText style={[styles.lightTxt, { color: color.medium }]}>
 								| {todo.day}-{todo.subject}
 							</AppText>
 							<AppBtn
-								style={styles.btn}
+								style={[
+									styles.btn,
+									{
+										backgroundColor: color.medium,
+									},
+								]}
 								innerStyle={styles.innerBtn}
 								onPress={() => onDelete(todo.id)}
 							>
-								<Feather name='check' size={20} color={color.fg} />
+								<Feather name='check' size={20} color={color.lighter} />
 							</AppBtn>
 						</View>
 					))
@@ -48,12 +62,10 @@ const TasksList: React.FC<Props> = ({ todos, onDelete }) => {
 };
 const styles = StyleSheet.create({
 	lightTxt: {
-		color: color.medium,
 		fontSize: 15,
 		fontFamily: 'Lato_300Light',
 	},
 	todoItem: {
-		backgroundColor: color.lighter,
 		borderRadius: 5,
 		overflow: 'hidden',
 		marginVertical: 5,
@@ -63,7 +75,6 @@ const styles = StyleSheet.create({
 		height: 60,
 	},
 	btn: {
-		backgroundColor: color.black,
 		borderRadius: 0,
 		marginLeft: 5,
 	},

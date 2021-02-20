@@ -1,17 +1,17 @@
-import React, { useContext, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-
-import color from '../config/color';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useContext, useMemo, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { theme } from '../config/color';
+import { days, daysLong } from '../config/vars';
+import { ThemeContext } from '../context/Theme/ThemeContext';
+import { TodosContext } from '../context/Todos/TodosContext';
+import { ParamList } from '../types';
 import AppBtn from './AppBtn';
 import AppText from './AppText';
 import FormInput from './form/FormInput';
-import { TodosContext } from '../context/Todos/TodosContext';
 import TasksList from './TasksList';
-import { days, daysLong } from '../config/vars';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { ParamList } from '../types';
-import { RouteProp } from '@react-navigation/native';
 
 interface Props {
 	day: number;
@@ -52,6 +52,11 @@ const TasksModal: React.FC<Props> = ({ day, subject, navigation, route }) => {
 	const handleDelete = (id: string) => {
 		dispatch!({ type: 'DELETE', payload: { id } });
 	};
+	const themeCon = useContext(ThemeContext);
+	const color = useMemo(
+		() => (themeCon.theme == 'dark' ? theme.darkTheme : theme.lightTheme),
+		[themeCon],
+	);
 	return (
 		<View style={styles.container}>
 			<AppText style={styles.header}>
@@ -70,7 +75,7 @@ const TasksModal: React.FC<Props> = ({ day, subject, navigation, route }) => {
 						/>
 						<AppBtn
 							style={styles.outerBtn}
-							innerStyle={styles.btn}
+							innerStyle={[styles.btn, { backgroundColor: color.lighter }]}
 							onPress={handleAdd}
 						>
 							<Feather name='send' size={20} color={color.fg} />
@@ -102,8 +107,6 @@ const styles = StyleSheet.create({
 		marginLeft: 5,
 	},
 	btn: {
-		backgroundColor: color.lighter,
-		color: color.fg,
 		textAlign: 'center',
 		padding: 15,
 	},

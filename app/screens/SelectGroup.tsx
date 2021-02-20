@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import {
 	Pressable,
 	ScrollView,
@@ -10,7 +10,7 @@ import { Feather } from '@expo/vector-icons';
 
 import AppText from '../components/AppText';
 import AppScreen from '../components/AppScreen';
-import color from '../config/color';
+import { theme } from '../config/color';
 import { GroupContext } from '../context/Group/GroupContext';
 import { groupList } from '../utils/groupList';
 import defaultStyles from '../config/defaultStyles';
@@ -19,6 +19,7 @@ import { keys } from '../config/vars';
 import { groupInfo } from '../types';
 import { loadStateFromStorage } from '../utils/ManageAsyncStorage';
 import { useBackHandler } from '@react-native-community/hooks';
+import { ThemeContext } from '../context/Theme/ThemeContext';
 
 const SelectGroup: React.FC = () => {
 	const [search, setSearch] = useState('');
@@ -33,11 +34,87 @@ const SelectGroup: React.FC = () => {
 	const toggleSubGroup = () => {
 		setSubGroup(subGroup == 1 ? 2 : 1);
 	};
+	const themeCon = useContext(ThemeContext);
+	const color = useMemo(
+		() => (themeCon.theme == 'dark' ? theme.darkTheme : theme.lightTheme),
+		[themeCon],
+	);
+	const styles = useMemo(
+		() =>
+			StyleSheet.create({
+				bg: {
+					backgroundColor: color.bg,
+				},
+				container: {
+					width: '80%',
+					// paddingTop: 50,
+				},
+				input: {
+					color: color.fg,
+					fontSize: 20,
+					flex: 1,
+					padding: 10,
+					paddingLeft: 20,
+				},
+				inputIcon: {
+					minWidth: 30,
+				},
+				inputContainer: {
+					backgroundColor: color.lighter,
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'space-between',
+					borderRadius: 5,
+					flex: 1,
+				},
+				list: {
+					marginTop: 10,
+					borderRadius: 5,
+					maxHeight: '50%',
+					// height: 220,
+					// marginBottom: 100,
+				},
+				listItem: {
+					backgroundColor: color.lighter,
 
+					padding: 20,
+
+					borderBottomWidth: 1,
+					borderBottomColor: color.bg,
+				},
+				listItemText: {
+					fontSize: 20,
+					color: color.medium,
+				},
+				subBtn: {
+					backgroundColor: color.lighter,
+					color: color.fg,
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'center',
+					borderRadius: 5,
+					marginLeft: 10,
+					paddingHorizontal: 20,
+				},
+				row: {
+					flexDirection: 'row',
+					width: '100%',
+					alignItems: 'stretch',
+					justifyContent: 'space-between',
+					marginTop: 30,
+				},
+				title: {
+					fontSize: 50,
+					color: color.fg,
+					fontFamily: 'Lato_900Black',
+				},
+			}),
+		[color],
+	);
 	return (
 		<AppScreen style={styles.bg}>
 			<View style={styles.container}>
-				<AppText style={defaultStyles.title}>Select Your Group</AppText>
+				<AppText style={styles.title}>Select Your Group</AppText>
 
 				<View style={styles.row}>
 					<View style={styles.inputContainer}>
@@ -97,67 +174,5 @@ const SelectGroup: React.FC = () => {
 		</AppScreen>
 	);
 };
-const styles = StyleSheet.create({
-	bg: {
-		backgroundColor: color.bg,
-	},
-	container: {
-		width: '80%',
-		// paddingTop: 50,
-	},
-	input: {
-		color: color.fg,
-		fontSize: 20,
-		flex: 1,
-		padding: 10,
-		paddingLeft: 20,
-	},
-	inputIcon: {
-		minWidth: 30,
-	},
-	inputContainer: {
-		backgroundColor: color.lighter,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		borderRadius: 5,
-		flex: 1,
-	},
-	list: {
-		marginTop: 10,
-		borderRadius: 5,
-		maxHeight: '50%',
-		// height: 220,
-		// marginBottom: 100,
-	},
-	listItem: {
-		backgroundColor: color.lighter,
 
-		padding: 20,
-
-		borderBottomWidth: 1,
-		borderBottomColor: color.bg,
-	},
-	listItemText: {
-		fontSize: 20,
-		color: color.medium,
-	},
-	subBtn: {
-		backgroundColor: color.lighter,
-		color: color.fg,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 5,
-		marginLeft: 10,
-		paddingHorizontal: 20,
-	},
-	row: {
-		flexDirection: 'row',
-		width: '100%',
-		alignItems: 'stretch',
-		justifyContent: 'space-between',
-		marginTop: 30,
-	},
-});
 export default SelectGroup;

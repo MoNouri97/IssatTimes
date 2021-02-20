@@ -5,6 +5,7 @@ export const keys = {
 	SUBJECTS: 'subjects',
 	GROUP: 'group',
 	TODOS: 'todos',
+	THEME: 'theme',
 };
 export const fonts = {
 	light: 'Lato_300Light',
