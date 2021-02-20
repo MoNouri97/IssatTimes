@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import {
 	useFonts,
 	Lato_400Regular,
 	Lato_300Light,
 	Lato_900Black,
 } from '@expo-google-fonts/lato';
-
 import { SubjectsContext } from './app/context/Subjects/SubjectsContext';
 import { useSubjectsState } from './app/context/Subjects/useSubjectsState';
 import AppScreen from './app/components/AppScreen';
