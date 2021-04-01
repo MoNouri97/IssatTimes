@@ -23,6 +23,7 @@ import ScheduleAlt from './ScheduleAlt';
 import TabHeader from '../components/AppTabBar/TabHeader';
 import { FlatList } from 'react-native-gesture-handler';
 import TodosContext from '../context/Todos/TodosContext';
+import { add } from 'date-fns';
 
 const checkForUpdate = async () => {
 	const html = await fetchHtml(
@@ -89,14 +90,13 @@ const Tabs: React.FC<props> = ({ navigation }) => {
 
 	const dayTabs = useMemo(() => {
 		const d = new Date();
-		const today = d.getDay() - 1;
-		const todayDate = d.getDate();
+		const todayIndex = d.getDay() - 1;
 		// initial scroll
-		scrollTo(today, true);
+		scrollTo(todayIndex, true);
 
 		return days.map((day, i) => {
-			const date = todayDate + (i - today);
-			return `${day}\n${date}`;
+			const dayDate = add(d, { days: i - todayIndex });
+			return `${day}\n${dayDate.getDate()}`;
 		});
 	}, []);
 
